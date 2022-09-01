@@ -98,6 +98,6 @@ class PlannerApi {
   }
 }
 
-PlannerApi.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pc3RlcnNudWdnbGVzIiwiaWF0IjoxNjU5NDc1Mzg0fQ.mOzaG3mnPk5KLSR3zT6xkoEE7z5Ev3fOD7zefV1QNTk"
+// PlannerApi.token = token
 
 export default PlannerApi;
