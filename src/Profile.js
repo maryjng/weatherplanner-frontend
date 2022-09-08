@@ -4,16 +4,17 @@ import UserContext from "./UserContext"
 import PlannerApi from "./api"
 
 function Profile() {
-    const [currentUser, setCurrentUser] = useContext(UserContext)
+    const { currentUser, setCurrentUser } = useContext(UserContext)
 
     const [formData, setFormData] = useState({
+        username: currentUser.username,
         email: currentUser.email,
         password:""
     })
 
     async function handleSubmit(e){
         e.preventDefault()
-        let updatedUser = await PlannerApi.updateProfile(currentUser.username, formData)
+        let updatedUser = await PlannerApi.updateProfile(formData)
         setCurrentUser(updatedUser)
     }
 
@@ -26,9 +27,9 @@ function Profile() {
     }
 
     // redirect if not logged in
-    if (!currentUser) {
-        return <Navigate to="/login" />;
-      }
+    // if (!currentUser) {
+    //     return <Navigate to="/login" />;
+    //   }
 
     return(
         <form onSubmit={handleSubmit}>
@@ -36,7 +37,7 @@ function Profile() {
             <input type="email" value={formData.email} onChange={handleChange} />
 
             <label>Password</label>
-            <input type="text" value={formData.password} onChange={handleChange} placeholder="Confirm password to make changes"/>
+            <input type="text" value={formData.password} name="password" onChange={handleChange} placeholder="Confirm password to make changes" required />
 
             <button type="submit" onClick={handleSubmit}>Update Profile</button>
         </form>

@@ -1,8 +1,10 @@
 import React, { useState } from "react"
+import { navigate } from "react-big-calendar/lib/utils/constants";
 import { useNavigate } from "react-router-dom";
 
 function Register({ register }) {
-    const history = useNavigate()
+    const navigate = useNavigate()
+
     const [formData, setFormData] = useState({
         username:"",
         password:"",
@@ -17,6 +19,7 @@ function Register({ register }) {
             password:"",
             email: ""
         })
+        navigate("/", { replace: true });
     }
 
     function handleChange(e){

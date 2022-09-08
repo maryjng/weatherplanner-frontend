@@ -14,8 +14,8 @@ function Navbar({login, logout, register }) {
             <nav>
                 <Link to="/">Home</Link> 
 
-                <Link to="/profile">Profile</Link>
-                <Link to="/" onClick={logout}>Logout</Link>
+                <Link to="/profile"> | Profile</Link>
+                <Link to="/" onClick={logout}> | Logout</Link>
             </nav>
         )
     }
@@ -36,11 +36,9 @@ function Navbar({login, logout, register }) {
             <BrowserRouter>
                 {currentUser ? loggedIn(): loggedOut()}
                 <Routes>
-                    {/* <Route path="/" element={<App />} /> */}
                     <Route path="/login" element={<Login login={login} />} />
                     <Route path="/register" element={<Register register={register} />} />
                     <Route path="profile" element={<Profile />} />
-                    
                 </Routes>
             </BrowserRouter>
         </div>

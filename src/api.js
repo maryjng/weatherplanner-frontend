@@ -4,7 +4,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 
 class PlannerApi {
   // the token for interacting with the API will be stored here.
-  static token;
+  static token; 
 
   static async request(endpoint, data = {}, method = "get") {
     console.debug("API Call:", endpoint, data, method);
@@ -34,7 +34,7 @@ class PlannerApi {
 
   //REGISTER USER
   static async register(data) {
-    let res = await this.request(`users`, { data }, "post");
+    let res = await this.request(`users`, data, "post");
     return res.user;
   }
 
@@ -50,6 +50,12 @@ class PlannerApi {
   static async getUserAppts(username) {
     let res = await this.request(`users/${username}`)
     return res.appointments;
+  }
+
+  //Get appointment by id. Includes any stored forecast.
+  static async getAppt(id) {
+    let res = await this.request(`appointments/${id}`)
+    return res;
   }
 
   //Add an appointment
@@ -72,8 +78,9 @@ class PlannerApi {
 
   ///////////////////////////FORECASTS///////////////
   //Add a forecast for appt by appt_id
-  static async addForecast(data) {
-    let res = await this.request(`appointments`, { data }, "post")
+  //data has to be a specific format. Just pass the results of getForecast as data.
+  static async addForecast(appt_id, data) {
+    let res = await this.request(`appointments/${appt_id}/forecast`, { data }, "post")
     return res;
   }
 
@@ -91,13 +98,22 @@ class PlannerApi {
 
 //////////////////// WEATHER API FORECAST //////////////
   //GET FORECAST FROM WEATHER API
-  //data is {latitude, longitude, tempUnit=fahrenheit, timezone}
+  //data is {zipcode, tempUnit=fahrenheit,}
+//   res is result[isoDate] = {
+//     latitude: latitude,
+//     longitude: longitude,
+//     date: isoDate,
+//     max_temp: max_temp,
+//     min_temp: min_temp,
+//     weathercode: weathercode 
+// }
+// isoDate is yyyy-mm-dd
   static async getForecast(data) {
     let res = await this.request(`weatherapi`, { data })
     return res;
   }
 }
 
-// PlannerApi.token = token
+// PlannerApi.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pc3RlcnNudWdnbGVzIiwiaWF0IjoxNjU5NDc1Mzg0fQ.mOzaG3mnPk5KLSR3zT6xkoEE7z5Ev3fOD7zefV1QNTk"
 
 export default PlannerApi;

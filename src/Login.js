@@ -3,15 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { STORETOKEN } from "./App";
 
 function Login({ login }) {
-    const history = useNavigate()
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
         username:"",
         password:""
     })
 
-    async function handleSubmit(e){
+    function handleSubmit(e){
         e.preventDefault()
-        await login(formData.username, formData.password)
+        let res = login(formData)
+        console.log(res)
+        setFormData({
+            username:"",
+            password:""
+        })
+        navigate("/", { replace: true });
     }
 
     function handleChange(e){

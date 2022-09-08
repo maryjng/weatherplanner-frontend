@@ -9,6 +9,7 @@ const useLocalStorageState = (key, defaultValue=null) => {
   const [state, setState] = useState(() => {
     try {
       let value = JSON.parse(window.localStorage.getItem(key) || defaultValue);
+      console.log(value)
       return value;
     } catch (e) {
         console.log("Error", e.stack)
