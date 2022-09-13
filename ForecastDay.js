@@ -1,25 +1,18 @@
 import React from "react"
+import "./ForecastDay.css"
 
-
-function ForecastDay({ min_temp, max_temp, weathercode, date, }) {
+function ForecastDay({ min_temp, max_temp, weather, date, }) {
     const weekday = "test weekday"
-    // const weather
-    // const weatherImg
 
     return(
-        <div class="forecastBox" >
-            <div align="center">{date}</div>
-            <div align="center"> {weekday} </div>
-
-            <div class="forecastBoxWeather">
-                <div align="left">{min_temp}</div>
-                <div align="right">{max_temp}</div> 
-                <div align="center">
-                    <img src=""></img>
-                    {weathercode}
-                </div>
-            </div>
+    <div>
+        <div class="forecast-day">
+            <h6>{weekday} {date}</h6>
+            <p><img src=""></img>{weather}</p>
+            <p class="high">{min_temp}</p>
+            <p class="low">{max_temp}</p>
         </div>
+    </div>
     )
 }
 

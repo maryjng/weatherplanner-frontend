@@ -9,17 +9,13 @@ function ZipcodeForm({ getForecast }) {
         tempUnit: "celcius"
     })
 
-
     async function handleSubmit(e) {
         e.preventDefault()
-        getForecast(formData)
-        setFormData({ 
-            zipcode: "",
-            tempUnit: "celcius"
-        })
+        console.log(`FORM DATA: ${formData.zipcode} ${formData.tempUnit}`)
+        await getForecast(formData)
     }
 
-    async function handleChange(e) {
+    function handleChange(e) {
         const {value, name} = e.target
         setFormData(data => ({
             ...data,

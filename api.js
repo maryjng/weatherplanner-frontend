@@ -53,7 +53,7 @@ class PlannerApi {
   }
 
   //Get appointment by id. Includes any stored forecast.
-  static async getAppt(id) {
+  static async getAppt(id) { 
     let res = await this.request(`appointments/${id}`)
     return res;
   }
@@ -109,8 +109,8 @@ class PlannerApi {
 // }
 // isoDate is yyyy-mm-dd
   static async getForecast(data) {
-    console.log(data)
-    let res = await this.request(`weatherapi`, { data })
+    let res = await this.request(`weatherapi`, { data } )
+    console.log(res)
     return res;
   }
 }
