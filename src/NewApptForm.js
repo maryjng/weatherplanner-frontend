@@ -17,10 +17,18 @@ function NewApptForm({handleAddEvent}) {
 
     async function handleSubmit(e) {
         e.preventDefault()
+        //*** NEED TO FIGURE OUT HOW TO set the username without having to submit the form twice */
         setFormData(data => ({ ...data, username: currentUser}))
         console.log(formData)
         let newAppt = await PlannerApi.addAppt(formData)
         handleAddEvent(newAppt)
+        setFormData({
+            title: "", 
+            startDate: "", 
+            endDate: "", 
+            location: "", 
+            description: "" 
+        })
     }
 
     function handleChange(e){

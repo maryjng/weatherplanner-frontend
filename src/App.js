@@ -20,7 +20,6 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./App.css";
-import { previousSaturday } from "date-fns";
 
 export const STORETOKEN = "weatherplanner-token";
 
@@ -50,14 +49,60 @@ function App() {
       end: new Date('2022, 9, 16, 15:00:00')
     }
   ]);
+  // displayForecast is meant to display forecast data received either from submitting the ZipcodeForm or from clicking an event (appt) in the Calendar component and fetching the saved forecast from db
+  const [displayForecast, setDisplayForecast] = useState([
+      {
+        "date": "2022-09-14",
+        "max_temp": 78.5,
+        "min_temp": 65.5,
+        "weather": "thunderstorm"
+      },
+      {
+        "date": "2022-09-15",
+        "max_temp": 78.3,
+        "min_temp": 58.7,
+        "weather": "thunderstorm"
+      },
+      {
+        "date": "2022-09-16",
+        "max_temp": 69.5,
+        "min_temp": 58.1,
+        "weather": "fog"
+      },
+      {
+        "date": "2022-09-17",
+        "max_temp": 75.3,
+        "min_temp": 47.5,
+        "weather": "cloudy"
+      },
+      {
+        "date": "2022-09-18",
+        "max_temp": 78.7,
+        "min_temp": 56.8,
+        "weather": "cloudy"
+      },
+       {
+        "date": "2022-09-19",
+        "max_temp": 82.1,
+        "min_temp": 60.9,
+        "weather": "drizzle"
+      },
+      {
+        "date": "2022-09-20",
+        "max_temp": 82.1,
+        "min_temp": 62.7,
+        "weather": "sunny"
+      }
+  ])
 
   //change appointment keys of dateStart and dateEnd to start and end for Calendar event use
   function convertEventForCalendar(event) {
-    let { title, dateStart, dateEnd, location, description } = event
+    let { id, title, startdate, enddate, location, description } = event
     let calendarEvent = {
+      "id": id,
       "title": title,
-      "start": dateStart,
-      "end": dateEnd,
+      "start": startdate,
+      "end": enddate,
       "location": location,
       "description": description
     }
@@ -68,7 +113,36 @@ function App() {
       setAllEvents(allEvents => [...allEvents, newAppt]);
   }
 
-  //upon token change, set currentUser state
+  // upon click of event, fetch stored forecast and display it through ForecastCalendar component
+  async function handleSelected(event) {
+    let appt = await PlannerApi.getAppt(event.id)
+    console.log(appt)
+    if (appt.forecast) {
+      setDisplayForecast(appt.forecast)
+    }
+  }
+
+  // function handleZipcodeZeroes(zipcode) {
+  //   if (zipcode[0] != 0) return {"zeroes": 0, "zipcode": zipcode}
+  //   if (zipcode[1] == 0) return {"zeroes": 1, "zipcode": zipcode.slice(2)}
+  //   return {"zeroes": 2, "zipcode": zipcode.slice(1)}
+  // }
+
+  //need {zipcode, tempUnit=fahrenheit} 
+  async function getForecast(data) {
+    //get rid of leading 0s
+    //*** WILL NEED TO IMPLEMENT AN ACTUAL FIX FOR STORING ZIPCODES WITH LEADING 0s INTO DB*/
+    data["zipcode"] = parseInt(data["zipcode"])
+    console.log(`ForecastCalendar data: ${JSON.stringify(data)}`)
+    let results = await PlannerApi.getForecast(data)
+    console.log(`Results: ${results}`)
+    let resArr = results.values()
+    setDisplayForecast(resArr) 
+    console.log(resArr)
+    console.log(displayForecast)
+  }
+
+  //upon token change, set currentUser state and setAllEvents if any appointments
   useEffect(() => {
       async function getCurrentUser() {
         console.log(token)
@@ -81,6 +155,7 @@ function App() {
 
           console.log(res.appointments)
 
+          // organize and set state for user's appointments, if any
           if (res.appointments.length > 0) {
             let calendarEvents = res.appointments.map(function(e) {
               return convertEventForCalendar(e)
@@ -92,6 +167,7 @@ function App() {
           console.log(currentUser)
         } catch (error) {
           console.log(error.stack)
+          //if an error occurs, the user will have to login again
           setCurrentUser("")
         }
       }
@@ -100,11 +176,6 @@ function App() {
   }, [token]
   );
 
-  function handleSelected(event) {
-    let appt = PlannerApi.getAppt(event.id) 
-    //populate the forecast calendar with appt forecast info for each day
-
-  }
 
   async function login(data) {
     let token = await PlannerApi.login(data)
@@ -127,7 +198,7 @@ function App() {
       <div>
         <Navbar login={login} logout={logout} register={register} />
 
-        <ForecastCalendar />
+        <ForecastCalendar displayForecast={displayForecast} setDisplayForecast={setDisplayForecast} getForecast={getForecast} />
 
         <NewApptForm handleAddEvent={handleAddEvent} />
         <h1>Calendar</h1>

@@ -3,27 +3,19 @@ import PlannerApi from "./api"
 
 // FORM FOR GETTING FORECAST FOR GIVEN ZIPCODE SO USERS CAN VIEW FORECAST WHILE MAKING/EDITING AN APPOINTMENT
 
-function ZipcodeForm({ getRequestForecast }) {
+function ZipcodeForm({ getForecast }) {
     const [formData, setFormData] = useState({ 
         zipcode: "",
-        tempUnit: ""
+        tempUnit: "celcius"
     })
-
-    function getForecast(data) {
-        let forecast = getRequestForecast(data)
-        console.log(forecast) 
-    }
 
     async function handleSubmit(e) {
         e.preventDefault()
-        getForecast(formData)
-        setFormData({ 
-            zipcode: "",
-            tempUnit: ""
-        })
+        console.log(`FORM DATA: ${formData.zipcode} ${formData.tempUnit}`)
+        await getForecast(formData)
     }
 
-    async function handleChange(e) {
+    function handleChange(e) {
         const {value, name} = e.target
         setFormData(data => ({
             ...data,
@@ -36,7 +28,7 @@ function ZipcodeForm({ getRequestForecast }) {
             <label>Appointment address zipcode: </label>
             <input type="text" name="zipcode" value={formData.zipcode} onChange={handleChange} />
 
-            <label>Temperature Unit</label>
+            <label>Temperature Unit: </label>
             <select name="tempUnit" value={formData.tempUnit} onChange={handleChange}>
                 <option value="celcius">Celcius</option>
                 <option value="fahrenheit">Fahrenheit</option>

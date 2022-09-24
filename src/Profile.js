@@ -3,6 +3,8 @@ import { Navigate } from 'react-router-dom'
 import UserContext from "./UserContext"
 import PlannerApi from "./api"
 
+// for updating user's profile. Basically to update their email. Password field is just for verification.
+
 function Profile() {
     const { currentUser, setCurrentUser } = useContext(UserContext)
 

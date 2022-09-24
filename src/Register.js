@@ -19,6 +19,7 @@ function Register({ register }) {
             password:"",
             email: ""
         })
+        //redirect to "/"
         navigate("/", { replace: true });
     }
 

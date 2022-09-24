@@ -17,6 +17,7 @@ function Login({ login }) {
             username:"",
             password:""
         })
+        //redirect to "/"
         navigate("/", { replace: true });
     }
 

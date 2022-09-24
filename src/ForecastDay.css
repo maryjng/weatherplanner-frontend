@@ -1,0 +1,35 @@
+*{
+    box-sizing: border-box;
+    font-family: 'Droid Sans', sans-serif;
+  }
+
+  .forecast {
+    height: 120px;
+    width: 500px;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-basis: 0;
+  }
+
+.forecast-day {
+    margin-right: 10px;
+    text-align: center;
+}
+
+.high {
+    font-weight: bold;
+    color: red;
+    font-size: 13px;
+}
+
+.low {
+    font-weight: bold;
+    color: blue;
+    font-size: 13px;
+}
+
+img {
+    height:"30px";
+     width:"40px" 
+}
