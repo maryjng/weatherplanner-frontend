@@ -17,10 +17,18 @@ function NewApptForm({handleAddEvent}) {
 
     async function handleSubmit(e) {
         e.preventDefault()
+        //*** NEED TO FIGURE OUT HOW TO set the username without having to submit the form twice */
         setFormData(data => ({ ...data, username: currentUser}))
         console.log(formData)
         let newAppt = await PlannerApi.addAppt(formData)
         handleAddEvent(newAppt)
+        setFormData({
+            title: "", 
+            startDate: "", 
+            endDate: "", 
+            location: "", 
+            description: "" 
+        })
     }
 
     function handleChange(e){
@@ -38,17 +46,22 @@ function NewApptForm({handleAddEvent}) {
 
     return(
         <>
-            <h2>Add New Event</h2>
-            <form onSubmit={handleSubmit}>
-                <input type="text" placeholder="Add Title" name="title" style={{ width: "20%", marginRight: "10px" }} value={formData.title} onChange={handleChange} />
+            <h2 style={{textAlign: "center"}}>Add New Event</h2>
+            <form onSubmit={handleSubmit} style={{textAlign:"center"}}>
+                <label>Appointment Title: </label>
+                <input type="text" placeholder="Add Title" name="title" value={formData.title} onChange={handleChange} />
 
-                <DatePicker placeholderText="Start Date" showTimeSelect timeIntervals={15} style={{ marginRight: "10px" }} value={formData.startDate} selected={formData.startDate} onChange={(startDate) => setFormData({ ...formData, startDate })} />
+                <label>Start Date and Time: </label>
+                <DatePicker placeholderText="Start Date" showTimeSelect timeIntervals={15} value={formData.startDate} selected={formData.startDate} onChange={(startDate) => setFormData({ ...formData, startDate })} />
 
+                <label>End Date and Time: </label>
                 <DatePicker placeholderText="End Date" showTimeSelect timeIntervals={15} value={formData.endDate} selected={formData.endDate} onChange={(endDate) => setFormData({ ...formData, endDate })} />
 
-                <input type="text" placeholder="Location" name="location" value={formData.location} style={{ width: "20%", marginRight: "10px" }} onChange={handleChange} />
+                <label>Location: </label>
+                <input type="text" placeholder="Location" name="location" value={formData.location} onChange={handleChange} />
 
-                <input type="text-area" placeholder="Description" name="description" value={formData.description} style={{ width: "20%", marginRight: "10px" }} onChange={handleChange} />
+                <label>Description: </label> 
+                <input type="text-area" placeholder="Description" name="description" value={formData.description}  onChange={handleChange} />
 
                 <button style={{ marginTop: "10px" }} onClick={handleSubmit}>
                     Add Event

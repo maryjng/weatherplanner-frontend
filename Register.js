@@ -8,18 +8,30 @@ function Register({ register }) {
     const [formData, setFormData] = useState({
         username:"",
         password:"",
-        email: ""
+        email: "",
+        confirmPassword: ""
     })
 
     async function handleSubmit(e){
         e.preventDefault()
-        await register(formData);
-        setFormData({
-            username:"",
-            password:"",
-            email: ""
-        })
-        navigate("/", { replace: true });
+        if (formData.password === formData.confirmPassword) {
+            await register(formData);
+            setFormData({
+                username:"",
+                password:"",
+                email: ""
+            })
+            //redirect to "/"
+            navigate("/", { replace: true });
+        } else {
+            alert("Passwords do not match.")
+            setFormData({
+                username:"",
+                password:"",
+                email: "",
+                confirmPassword: ""
+            })
+        }
     }
 
     function handleChange(e){
@@ -35,11 +47,14 @@ function Register({ register }) {
             <label>Username</label>
             <input type="text" name="username" value={formData.username} placeholder="username" onChange={handleChange} required/>
 
-            <label>Password</label>
-            <input type="text" name="password" value={formData.password} placeholder="password" onChange={handleChange} required />
-            
             <label>Email</label>
             <input type="email" name="email" value={formData.email} placeholder="email" onChange={handleChange} required/>
+
+            <label>Password</label>
+            <input type="password" name="password" value={formData.password} placeholder="password" onChange={handleChange} required />
+            
+            <label>Confirm Password</label>
+            <input type="password" name="confirmPassword" value={formData.confirmPassword} placeholder="reenter password" onChange={handleChange} required />
 
             <button type="submit" onSubmit={handleSubmit}>Register</button>
         </form>

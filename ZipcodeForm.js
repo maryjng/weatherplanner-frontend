@@ -12,7 +12,7 @@ function ZipcodeForm({ getForecast }) {
     async function handleSubmit(e) {
         e.preventDefault()
         console.log(`FORM DATA: ${formData.zipcode} ${formData.tempUnit}`)
-        await getForecast(formData)
+        let res = await getForecast(formData)
     }
 
     function handleChange(e) {
@@ -25,10 +25,10 @@ function ZipcodeForm({ getForecast }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <label>Appointment address zipcode: </label>
+            <label>Location Zipcode: </label>
             <input type="text" name="zipcode" value={formData.zipcode} onChange={handleChange} />
 
-            <label>Temperature Unit</label>
+            <label>Temperature Unit: </label>
             <select name="tempUnit" value={formData.tempUnit} onChange={handleChange}>
                 <option value="celcius">Celcius</option>
                 <option value="fahrenheit">Fahrenheit</option>

@@ -44,12 +44,18 @@ class PlannerApi {
     return res;
   }
 
+  //Update user email and/or password
+  static async update(username, data) {
+    let res = await this.request(`users/${username}`, data, "patch")
+    return res;
+  }
+
 
 ////////////////////////////APPOINTMENTS////////////
   //Get user appointments only
   static async getUserAppts(username) {
     let res = await this.request(`users/${username}`)
-    return res.appointments;
+    return res;
   }
 
   //Get appointment by id. Includes any stored forecast.
@@ -60,14 +66,14 @@ class PlannerApi {
 
   //Add an appointment
   static async addAppt(data) {
-    let res = await this.request(`appointments`, { data }, "post")
-    return res.appointments;
+    let res = await this.request(`appointments`, data, "post")
+    return res;
   }
 
   //Updates an appointment
   static async updateAppt(data) {
-    let res = await this.request(`appointments`, { data }, "patch")
-    return res.appointments;
+    let res = await this.request(`appointments`, data, "patch")
+    return res;
   }
 
   //Deletes an appointment
@@ -80,13 +86,18 @@ class PlannerApi {
   //Add a forecast for appt by appt_id
   //data has to be a specific format. Just pass the results of getForecast as data.
   static async addForecast(appt_id, data) {
-    let res = await this.request(`appointments/${appt_id}/forecast`, { data }, "post")
+    let res = await this.request(`appointments/${appt_id}/forecast`, data, "post")
+    return res;
+  }
+
+  static async getApptForecast(appt_id) {
+    let res = await this.request(`appointments/${appt_id}/forecast`)
     return res;
   }
 
   //Updates a forecast of id for appointment of appt_id
   static async updateForecast(appt_id, id, data) {
-    let res = await this.request(`appointments/${appt_id}/forecast/${id}`, { data }, "patch")
+    let res = await this.request(`appointments/${appt_id}/forecast/${id}`, data, "patch")
     return res;
   }
 
@@ -109,7 +120,7 @@ class PlannerApi {
 // }
 // isoDate is yyyy-mm-dd
   static async getForecast(data) {
-    let res = await this.request(`weatherapi`, { data } )
+    let res = await this.request(`weatherapi`, data )
     console.log(res)
     return res;
   }

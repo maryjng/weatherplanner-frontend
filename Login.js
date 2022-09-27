@@ -17,6 +17,7 @@ function Login({ login }) {
             username:"",
             password:""
         })
+        //redirect to "/"
         navigate("/", { replace: true });
     }
 
@@ -34,7 +35,7 @@ function Login({ login }) {
             <input type="text" name="username" value={formData.username} placeholder="username" onChange={handleChange} />
 
             <label>Password</label>
-            <input type="text" name="password" value={formData.password} placeholder="password" onChange={handleChange} />
+            <input type="password" name="password" value={formData.password} placeholder="password" onChange={handleChange} />
 
             <button type="submit" onSubmit={handleSubmit}>Login</button>
         </form>

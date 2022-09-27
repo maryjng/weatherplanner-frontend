@@ -4,9 +4,11 @@ import UserContext from "./UserContext"
 import Register from "./Register"
 import Profile from "./Profile"
 import Login from "./Login"
+import NewApptForm from "./NewApptForm"
 
+// shows a navbar with links depending on whether user is logged in or not (i.e. whether currentUser state is not null)
 
-function Navbar({login, logout, register }) {
+function Navbar({logout }) {
     const { currentUser } = useContext(UserContext)
 
     function loggedIn(){
@@ -15,6 +17,7 @@ function Navbar({login, logout, register }) {
                 <Link to="/">Home</Link> 
 
                 <Link to="/profile"> | Profile</Link>
+                <Link to="/add"> | Add Appointment </Link>
                 <Link to="/" onClick={logout}> | Logout</Link>
             </nav>
         )
@@ -33,14 +36,7 @@ function Navbar({login, logout, register }) {
 
     return(
         <div>
-            <BrowserRouter>
-                {currentUser ? loggedIn(): loggedOut()}
-                <Routes>
-                    <Route path="/login" element={<Login login={login} />} />
-                    <Route path="/register" element={<Register register={register} />} />
-                    <Route path="profile" element={<Profile />} />
-                </Routes>
-            </BrowserRouter>
+            {currentUser ? loggedIn(): loggedOut()}
         </div>
     )
 
