@@ -6,10 +6,10 @@ import PlannerApi from "./api"
 // for updating user's profile. Basically to update their email or password. Password field is also for verification.
 
 function EditProfileForm() {
-    const { currentUser, setCurrentUser } = useContext(UserContext)
+    const { currentUser } = useContext(UserContext)
 
     const DEFAULT_STATE = {
-        username: currentUser.username,
+        username: currentUser,
         email: "",
         newPassword: "",
         newPasswordReenter: "",
@@ -22,25 +22,19 @@ function EditProfileForm() {
         e.preventDefault()
         try {
             let data = {
-                "username": currentUser.username,
-                "email": formData.email,
-                "password": "",
-                "currPassword": formData.password
+                "currPassword": formData.currPassword
             }
             //if password is being updated, make sure new password and its confirmation field match
-            if (formData.newPassword === formData.newPasswordReenter) {
-                data.newPassword = formData.password
+            if (formData.newPassword.length >= 5 && formData.newPassword === formData.newPasswordReenter) {
+                data.password = formData.newPassword
             }
-            if (formData.newPassword !== formData.newPasswordReenter) {
-                alert("New passwords do not match.")
-                setFormData(DEFAULT_STATE)
-                return <Navigate to="/profile" />
+            if (formData.email.length >= 6) {
+                data.email = formData.email
             }
 
-            //need to pass in username params
-            let updatedUser = await PlannerApi.update(currentUser.username, data)
-            setCurrentUser(updatedUser)
-            return <Navigate to="/profile" />
+            await PlannerApi.update(currentUser, data)
+            setFormData(DEFAULT_STATE)
+
         } catch(e) {
             console.log(e)
         }

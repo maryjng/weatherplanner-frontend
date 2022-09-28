@@ -12,7 +12,7 @@ function ZipcodeForm({ getForecast }) {
     async function handleSubmit(e) {
         e.preventDefault()
         console.log(`FORM DATA: ${formData.zipcode} ${formData.tempUnit}`)
-        let res = await getForecast(formData)
+        await getForecast(formData)
     }
 
     function handleChange(e) {

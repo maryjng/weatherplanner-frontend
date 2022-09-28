@@ -120,7 +120,7 @@ class PlannerApi {
 // }
 // isoDate is yyyy-mm-dd
   static async getForecast(data) {
-    let res = await this.request(`weatherapi`, data )
+    let res = await this.request(`weatherapi`, { data }, "post")
     console.log(res)
     return res;
   }

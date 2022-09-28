@@ -39,15 +39,12 @@ function App() {
   //upon token change, set currentUser state and setAllEvents if any appointments
   useEffect(() => {
       async function getCurrentUser() {
-        console.log(token)
         if (token) {
         try {
           PlannerApi.token = token;
           let { username } = jwt.decode(token)
           let res = await PlannerApi.getUser(username)
           setCurrentUser(res.username)
-
-          console.log(res.appointments)
 
           // organize and set state for user's appointments, if any
           if (res.appointments.length > 0) {
@@ -71,7 +68,6 @@ function App() {
   async function login(data) {
     let token = await PlannerApi.login(data)
     setToken(token);
-    console.log(token)
   }
 
   async function register(data) {

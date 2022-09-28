@@ -12,18 +12,15 @@ function AddApptCalendar({handleAddEvent, allEvents}) {
     async function getForecast(data) {
         //get rid of leading 0s
         //*** WILL NEED TO IMPLEMENT AN ACTUAL FIX FOR STORING ZIPCODES WITH LEADING 0s INTO DB*/
-        data["zipcode"] = parseInt(data["zipcode"])
-        console.log(`ForecastCalendar data: ${JSON.stringify(data)}`)
-        let results = await PlannerApi.getForecast({
-            "zipcode": JSON.stringify(data.zipcode),
-            "tempUnit": data.tempUnit
-        })
-        console.log(`Results: ${results}`)
-        let resArr = results.values()
+        data.zipcode = parseInt(data.zipcode)
+        let results = await PlannerApi.getForecast(data)
+
+        //forecast state format is [{weather, min_temp, max_temp, date}] for mapping
+        let resArr = Object.values(results)
         setForecast(resArr) 
-        console.log(resArr)
-        console.log(forecast)
     }
+
+    //save forecasts along with new appointment if zipcode is the same
 
   return(
     <>
