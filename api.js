@@ -67,18 +67,19 @@ class PlannerApi {
   //Add an appointment
   static async addAppt(data) {
     let res = await this.request(`appointments`, data, "post")
+    console.log(res)
     return res;
   }
 
   //Updates an appointment
-  static async updateAppt(data) {
-    let res = await this.request(`appointments`, data, "patch")
+  static async updateAppt(id, data) {
+    let res = await this.request(`appointments/${id}`, data, "patch")
     return res;
   }
 
   //Deletes an appointment
   static async deleteAppt(id) {
-    let res = await this.request(`appointments/${id}`, "delete")
+    let res = await this.request(`appointments/${id}`, {}, "delete")
     return res;
   }
 

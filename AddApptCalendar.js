@@ -10,9 +10,6 @@ function AddApptCalendar({handleAddEvent, allEvents}) {
     const [forecast, setForecast] = useState([])
       //need {zipcode, tempUnit=fahrenheit} 
     async function getForecast(data) {
-        //get rid of leading 0s
-        //*** WILL NEED TO IMPLEMENT AN ACTUAL FIX FOR STORING ZIPCODES WITH LEADING 0s INTO DB*/
-        data.zipcode = parseInt(data.zipcode)
         let results = await PlannerApi.getForecast(data)
 
         //forecast state format is [{weather, min_temp, max_temp, date}] for mapping
@@ -24,10 +21,10 @@ function AddApptCalendar({handleAddEvent, allEvents}) {
 
   return(
     <>
+        <ShowCalendar allEvents={allEvents} />
         <ZipcodeForm getForecast={getForecast} />
         <ForecastCalendar displayForecast={forecast} />
         <NewApptForm handleAddEvent={handleAddEvent} />
-        <ShowCalendar allEvents={allEvents} />
     </>
   )
 

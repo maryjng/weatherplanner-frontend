@@ -12,7 +12,6 @@ function Login({ login }) {
     function handleSubmit(e){
         e.preventDefault()
         let res = login(formData)
-        console.log(res)
         setFormData({
             username:"",
             password:""

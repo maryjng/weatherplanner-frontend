@@ -23,15 +23,34 @@ function App() {
       setAllEvents(allEvents => [...allEvents, newAppt]);
   }
 
+  function handleEditEvent(editAppt) {
+    console.log(allEvents)
+    let updatedEvents = allEvents.filter(e => e.id !== editAppt.id)
+    console.log(updatedEvents)
+    updatedEvents.push(editAppt)
+    console.log(updatedEvents)
+    setAllEvents(updatedEvents)
+  }
+
+  function handleDeleteEvent(appt_id) {
+    let updatedEvents = allEvents.filter(e => e.id !== appt_id)
+    setAllEvents(updatedEvents)
+  }
+
   function convertEventForCalendar(event) {
-    let { id, title, startdate, enddate, location, description } = event
+    let { id, title, startdate, enddate, location, description, zipcode } = event
+    //convert to js date object for react big calendar to work with
+    startdate = new Date(startdate)
+    enddate = new Date(enddate)
+
     let calendarEvent = {
       "id": id,
       "title": title,
       "start": startdate,
       "end": enddate,
       "location": location,
-      "description": description
+      "description": description,
+      "zipcode": zipcode
     }
     return calendarEvent;
   }
@@ -86,7 +105,7 @@ function App() {
       <BrowserRouter>
         <Navbar login={login} logout={logout} register={register} />
         <Routes>
-          <Route path="/" element={<HomeCalendar allEvents={allEvents} />} />
+          <Route path="/" element={<HomeCalendar allEvents={allEvents} handleEditEvent={handleEditEvent} handleDeleteEvent={handleDeleteEvent} />} />
           <Route path="/login" element={<Login login={login} />} />
           <Route path="/register" element={<Register register={register} />} />
           <Route path="/profile" element={<Profile />} />

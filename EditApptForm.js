@@ -1,10 +1,12 @@
 import React, { useContext, useState } from "react"
+import { useNavigate } from "react-router-dom";
 import UserContext from "./UserContext"
 import PlannerApi from "./api"
 import DatePicker from "react-datepicker";
 
 
-function NewApptForm({handleAddEvent}) {
+function EditApptForm({handleEditEvent, appt_id}) {
+    const navigate = useNavigate()
     const { currentUser } = useContext(UserContext)
 
     const [formData, setFormData] = useState({ 
@@ -18,13 +20,10 @@ function NewApptForm({handleAddEvent}) {
 
     async function handleSubmit(e) {
         e.preventDefault()
-        //*** NEED TO FIGURE OUT HOW TO set the username without having to submit the form twice */
-        setFormData(data => ({ ...data, "username": currentUser}))
+        // setFormData(data => ({ ...data, "username": currentUser}))
 
-        let newAppt = await PlannerApi.addAppt(formData)
-
-        console.log(newAppt)
-        handleAddEvent(newAppt)
+        let editAppt = await PlannerApi.updateAppt(appt_id, formData)
+        handleEditEvent(editAppt)
         
         setFormData({
             username: currentUser,
@@ -35,8 +34,7 @@ function NewApptForm({handleAddEvent}) {
             zipcode: "",
             description: "" 
         })
-
-
+        navigate("/", { replace: true });
     }
 
     function handleChange(e){
@@ -54,7 +52,7 @@ function NewApptForm({handleAddEvent}) {
 
     return(
         <>
-            <h2 style={{textAlign: "center"}}>Add Appointment</h2>
+            <h2 style={{textAlign: "center"}}>Edit Appointment</h2>
             <form onSubmit={handleSubmit} style={{textAlign:"center"}}>
                 <label>Appointment Title: </label>
                 <input type="text" placeholder="Add Title" name="title" value={formData.title} onChange={handleChange} />
@@ -75,7 +73,7 @@ function NewApptForm({handleAddEvent}) {
                 <input type="text-area" placeholder="Description" name="description" value={formData.description}  onChange={handleChange} />
 
                 <button style={{ marginTop: "10px" }} onClick={handleSubmit}>
-                    Add Event
+                    Submit
                 </button>
           </form>
         </>
@@ -83,4 +81,4 @@ function NewApptForm({handleAddEvent}) {
 }
 
 
-export default NewApptForm;
+export default EditApptForm;
