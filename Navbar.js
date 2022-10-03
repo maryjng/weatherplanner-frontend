@@ -1,10 +1,7 @@
 import React, { useContext } from "react"
-import { BrowserRouter, Route, Link, Routes} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import UserContext from "./UserContext"
-import Register from "./Register"
-import Profile from "./Profile"
-import Login from "./Login"
-import NewApptForm from "./NewApptForm"
+
 
 // shows a navbar with links depending on whether user is logged in or not (i.e. whether currentUser state is not null)
 

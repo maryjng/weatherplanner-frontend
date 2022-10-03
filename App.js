@@ -7,9 +7,9 @@ import Navbar from "./Navbar"
 import UserContext from "./UserContext"
 import jwt from "jsonwebtoken"
 import useLocalStorageState from "./hooks/useLocalStorageState"
-import Register from "./Register"
+import Register from "./forms/Register"
 import Profile from "./Profile"
-import Login from "./Login"
+import Login from "./forms/Login"
 import "./App.css";
 
 export const STORETOKEN = "weatherplanner-token";

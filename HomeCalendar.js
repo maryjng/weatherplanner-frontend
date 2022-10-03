@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ShowCalendar from "./ShowCalendar";
 import ApptDetail from "./ApptDetail";
-import EditApptForm from "./EditApptForm";
+import EditApptForm from "./forms/EditApptForm";
 import PlannerApi from "./api";
 
 function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent }) {
@@ -20,16 +20,16 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent }) {
         if (appt.zipcode.length < 5) {
             appt.zipcode = ("0" * (5 - appt.zipcode.length)) + appt.zipcode
         } 
-
-        //separate the forecast and appt details for display purposes
         setApptDetails(appt)
-        if (appt.forecast) {
-            setApptForecast(appt.forecast)
-        }
+
+        let forecast = await PlannerApi.getApptForecast(event.id)
+        console.log(forecast)
+        setApptForecast(forecast)
     }
 
     async function handleDelete() {
         let result = await PlannerApi.deleteAppt(apptDetails.id)
+        await PlannerApi.delete
         handleDeleteEvent(apptDetails.id)
         navigate("/", { replace: true });
         return result;

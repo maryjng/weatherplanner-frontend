@@ -1,7 +1,7 @@
 import ShowCalendar from "./ShowCalendar"
-import NewApptForm from "./NewApptForm";
+import NewApptForm from "./forms/NewApptForm";
 import ForecastCalendar from "./ForecastDisplay/ForecastCalendar";
-import ZipcodeForm from "./ZipcodeForm"
+import ZipcodeForm from "./forms/ZipcodeForm"
 import React, { useState } from "react";
 import PlannerApi from "./api";
 

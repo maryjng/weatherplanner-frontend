@@ -1,4 +1,4 @@
-import EditProfileForm from "./EditProfileForm";
+import EditProfileForm from "./forms/EditProfileForm";
 
 
 function Profile() {
