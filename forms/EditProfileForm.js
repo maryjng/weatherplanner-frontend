@@ -49,9 +49,9 @@ function EditProfileForm() {
     }
 
     // redirect if not logged in
-    if (!currentUser) {
-        return <Navigate to="/login" />;
-      }
+    // if (!currentUser) {
+    //     return <Navigate to="/login" />;
+    //   }
 
     return(
         <form onSubmit={handleSubmit}>

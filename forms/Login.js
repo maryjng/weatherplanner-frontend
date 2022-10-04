@@ -16,8 +16,8 @@ function Login({ login }) {
             username:"",
             password:""
         })
-        //redirect to "/"
-        navigate("/", { replace: true });
+        //redirect to calendar
+        navigate("/calendar/view", { replace: true });
     }
 
     function handleChange(e){

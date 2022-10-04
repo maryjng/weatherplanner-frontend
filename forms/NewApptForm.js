@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react"
 import UserContext from "../UserContext"
 import PlannerApi from "../api"
 import DatePicker from "react-datepicker";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 
 function NewApptForm({handleAddEvent}) {
@@ -74,6 +76,42 @@ function NewApptForm({handleAddEvent}) {
     return(
         <>
             <h2 style={{textAlign: "center"}}>Add Appointment</h2>
+            {/* <Form className="w-25 p-3" style={{ }}onSubmit={handleSubmit}>
+                <Form.Group className="mb-3" controlId="formBasicTitle" value={formData.title} onChange={handleChange}>
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control type="text" placeholder="Appointment Title" />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicDate" value={formData.startDate} onChange={handleChange}>
+                    <Form.Label>Start Date and Time</Form.Label>
+                    <DatePicker placeholderText="Start Date" showTimeSelect timeIntervals={15} value={formData.startDate} selected={formData.startDate} onChange={(startDate) => setFormData({ ...formData, startDate })} />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicTitle" value={formData.endDate} onChange={handleChange}>
+                    <Form.Label>End Date and Time</Form.Label>
+                    <DatePicker placeholderText="End Date" showTimeSelect timeIntervals={15} value={formData.endDate} selected={formData.endDate} onChange={(endDate) => setFormData({ ...formData, endDate })} />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicLocation" value={formData.location} onChange={handleChange}>
+                    <Form.Label>Address</Form.Label>
+                    <Form.Control type="text" placeholder="Appt Address and City/Town" />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicZipcode" value={formData.zipcode} onChange={handleChange}>
+                    <Form.Label>Zipcode</Form.Label>
+                    <Form.Control type="text" placeholder="Location zipcode" /> 
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicDescription" value={formData.description} onChange={handleChange}>
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control type="text" placeholder="Description" />
+                </Form.Group>
+
+                <Button variant="primary" type="submit" onClick={handleSubmit}>
+                    Submit
+                </Button>
+            </Form> */}
+
             <form onSubmit={handleSubmit} style={{textAlign:"center"}}>
                 <label>Appointment Title: </label>
                 <input type="text" placeholder="Add Title" name="title" value={formData.title} onChange={handleChange} />
