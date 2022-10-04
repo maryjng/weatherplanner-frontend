@@ -29,7 +29,6 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent }) {
 
     async function handleDelete() {
         let result = await PlannerApi.deleteAppt(apptDetails.id)
-        await PlannerApi.delete
         handleDeleteEvent(apptDetails.id)
         navigate("/", { replace: true });
         return result;

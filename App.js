@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { BrowserRouter, Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PlannerApi from "./api";
 import HomeCalendar from "./HomeCalendar";
 import AddApptCalendar from "./AddApptCalendar";
-import Navbar from "./Navbar"
+import Home from "./Home";
+import CalNavbar from "./CalNavbar"
 import UserContext from "./UserContext"
 import jwt from "jsonwebtoken"
 import useLocalStorageState from "./hooks/useLocalStorageState"
@@ -81,7 +82,7 @@ function App() {
       }
     }
     getCurrentUser()
-  }, [token]
+  }, [token, currentUser]
   );
 
   async function login(data) {
@@ -103,13 +104,18 @@ function App() {
     <>
     <UserContext.Provider value={{currentUser, token}}>
       <BrowserRouter>
-        <Navbar login={login} logout={logout} register={register} />
+        <CalNavbar login={login} logout={logout} register={register} />
         <Routes>
-          <Route path="/" element={<HomeCalendar allEvents={allEvents} handleEditEvent={handleEditEvent} handleDeleteEvent={handleDeleteEvent} />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/calendar">
+            <Route path="/calendar/view" element={<HomeCalendar allEvents={allEvents} handleEditEvent={handleEditEvent} handleDeleteEvent={handleDeleteEvent} />} />
+            <Route path="/calendar/add" element={<AddApptCalendar handleAddEvent={handleAddEvent} allEvents={allEvents}/>} />
+          </Route>
+
           <Route path="/login" element={<Login login={login} />} />
           <Route path="/register" element={<Register register={register} />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/add" element={<AddApptCalendar handleAddEvent={handleAddEvent} allEvents={allEvents}/>} />
+
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>
