@@ -4,6 +4,9 @@ import ShowCalendar from "./ShowCalendar";
 import ApptDetail from "./ApptDetail";
 import EditApptForm from "./forms/EditApptForm";
 import PlannerApi from "./api";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent }) {
     const navigate = useNavigate()
@@ -44,24 +47,29 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent }) {
         <>
             <ShowCalendar handleSelected={handleSelected} allEvents={allEvents} />
 
-            <div>
-                <button onClick={showEditForm}>Edit</button> 
-                <button onClick={handleDelete}>Delete</button>
-            </div>
+            <Container>
+                <Row>
+                    <Col sm={8} style={{padding: "0px"}}>
+                        <div>
+                            <button onClick={showEditForm}>Edit Appointment</button> 
+                            <button onClick={handleDelete}>Delete Appointment</button>
+                        </div>
 
-            <ApptDetail apptForecast={apptForecast} />
-            <div>
-                <div>Title: {apptDetails.title}</div>
-                <div>Start: {apptDetails.startdate}</div>
-                <div>End: {apptDetails.enddate}</div>
-                <div>Location: {apptDetails.location}</div>
-                <div>Zipcode: {apptDetails.zipcode}</div>
-                <div>Description:{apptDetails.description}</div>
-            </div>
-
-            <div>
-                {apptDetails !== "" ? showEditForm() : ''}
-            </div>
+                        <ApptDetail apptForecast={apptForecast} />
+                        <div>
+                            <div>Title: {apptDetails.title}</div>
+                            <div>Start: {apptDetails.startdate}</div>
+                            <div>End: {apptDetails.enddate}</div>
+                            <div>Location: {apptDetails.location}</div>
+                            <div>Zipcode: {apptDetails.zipcode}</div>
+                            <div>Description:{apptDetails.description}</div>
+                        </div>
+                    </Col>
+                    <Col sm={4}>
+                        {apptDetails !== "" ? showEditForm() : ''}
+                    </Col>
+                </Row>
+            </Container>
         </>
     )
 }

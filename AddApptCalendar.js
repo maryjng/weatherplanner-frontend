@@ -5,6 +5,10 @@ import ZipcodeForm from "./forms/ZipcodeForm"
 import React, { useState } from "react";
 import PlannerApi from "./api";
 
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 
 function AddApptCalendar({handleAddEvent, allEvents}) {
     const [forecast, setForecast] = useState([])
@@ -22,9 +26,19 @@ function AddApptCalendar({handleAddEvent, allEvents}) {
   return(
     <>
         <ShowCalendar allEvents={allEvents} />
-        <ZipcodeForm getForecast={getForecast} />
-        <ForecastCalendar displayForecast={forecast} />
-        <NewApptForm handleAddEvent={handleAddEvent} />
+
+        <Container>
+          <Row>
+            <Col sm={8} style={{left: "10px"}}>
+              <ZipcodeForm getForecast={getForecast} />
+              <ForecastCalendar displayForecast={forecast} />
+            </Col>
+            <Col sm={4}>
+              <NewApptForm handleAddEvent={handleAddEvent} />
+            </Col>
+          </Row>
+        </Container>
+ 
     </>
   )
 
