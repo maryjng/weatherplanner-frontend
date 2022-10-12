@@ -27,14 +27,14 @@ const localizer = dateFnsLocalizer({
 function ShowCalendar({ allEvents, handleSelected }) {
   const { currentUser } = useContext(UserContext)
 
-    function showNav() {
-      return(
-        <nav>
-          <Link to="/calendar/view">View/Edit</Link>
-          <Link to="/calendar/add"> | Add Appointment</Link>
-        </nav>
-      )
-    }
+  function showNav() {
+    return(
+      <nav>
+        <Link to="/calendar/view">View/Edit</Link>
+        <Link to="/calendar/add"> | Add Appointment</Link>
+      </nav>
+    )
+  }
   return (
     <>
       <div>
