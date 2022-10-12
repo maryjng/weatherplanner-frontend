@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react"
 import UserContext from "../UserContext"
 import PlannerApi from "../api"
+import Form from "react-bootstrap/Form"
+import Button from "react-bootstrap/Button"
 
 // for updating user's profile. Basically to update their email or password. Password field is also for verification.
 
@@ -48,21 +50,32 @@ function EditProfileForm() {
     }
 
     return(
-        <form onSubmit={handleSubmit}>
-            <label>New Email: </label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} />
+        <Form>
+            <Form.Group classname="mb-3" controlId="formBasicEmail">
+                <Form.Label>New Email</Form.Label>
+                <Form.Control type="text" placeholder="Enter new email" name="email" value={formData.email} onChange={handleChange}/>
+            </Form.Group>
 
-            <label>New Password: </label>
-            <input type="password" name="newPassword" value={formData.newPassword} onChange={handleChange} />
+            <Form.Group classname="mb-3" controlId="formBasicNewPassword">
+                <Form.Label>New Password</Form.Label>
+                <Form.Control type="password" placeholder="Enter new password" name="newPassword" value={formData.newPassword} onChange={handleChange} />
+            </Form.Group>
 
-            <label>Confirm New Password</label>
-            <input type="password" name="newPasswordReenter" value={formData.newPasswordReenter} onChange={handleChange} />
+            <Form.Group classname="mb-3" controlId="formBasicNewPasswordReenter">
+                <Form.Label>Reenter New Password</Form.Label>
+                <Form.Control type="password" placeholder="Reenter new password" name="newPasswordReenter" value={formData.newPasswordReenter} onChange={handleChange} />
+            </Form.Group>
 
-            <label>Confirm Password to Make Changes: </label>
-            <input type="password" value={formData.currPassword} name="currPassword" onChange={handleChange} required />
+            <Form.Group classname="mb-3" controlId="formcurrPassword">
+                <Form.Label>Current Password</Form.Label>
+                <Form.Control type="password" placeholder="Enter current password to confirm" name="currPassword" value={formData.currPassword} onChange={handleChange}/>
+            </Form.Group>
 
-            <button type="submit" onClick={handleSubmit}>Update Profile</button>
-        </form>
+            <Button onClick={handleSubmit} variant="primary" type="submit">
+                Update Profile
+            </Button>
+
+        </Form>
     )
 }
 

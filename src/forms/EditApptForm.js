@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import UserContext from "../UserContext"
 import PlannerApi from "../api"
 import DatePicker from "react-datepicker";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import "./DatePicker.css";
 
 
 function EditApptForm({handleEditEvent, appt_id}) {
@@ -34,7 +37,7 @@ function EditApptForm({handleEditEvent, appt_id}) {
             zipcode: "",
             description: "" 
         })
-        navigate("/", { replace: true });
+        navigate("/calendar/view", { replace: true });
     }
 
     function handleChange(e){
@@ -52,30 +55,43 @@ function EditApptForm({handleEditEvent, appt_id}) {
 
     return(
         <>
-            <h2 style={{textAlign: "left"}}>Edit Appointment</h2>
-            <form onSubmit={handleSubmit} style={{textAlign:"center"}}>
-                <label>Appointment Title: </label>
-                <input type="text" placeholder="Add Title" name="title" value={formData.title} onChange={handleChange} />
+        <h2>Edit Appointment</h2>
+        <Form>
+            <Form.Group classname="mb-3" controlId="formBasicTitle">
+                <Form.Label>Appointment Title</Form.Label>
+                <Form.Control type="text" placeholder="Enter title" name="title" value={formData.title} onChange={handleChange}/>
+            </Form.Group>
 
-                <label>Start Date and Time: </label>
-                <DatePicker placeholderText="Start Date" showTimeSelect timeIntervals={15} value={formData.startDate} selected={formData.startDate} onChange={(startDate) => setFormData({ ...formData, startDate })} />
+            <Form.Group classname="mb-3" controlId="formBasicStartDate">
+                <Form.Label>Start Date and Time</Form.Label>
+                <DatePicker placeholderText="Start Date" showTimeSelect timeIntervals={15} value={formData.startDate} selected={formData.startDate} dateFormat="MMMM d, yyyy h:mm aa" onChange={(startDate) => setFormData({ ...formData, startDate })} style={{width:"100%"}} />
+            </Form.Group>
 
-                <label>End Date and Time: </label>
-                <DatePicker placeholderText="End Date" showTimeSelect timeIntervals={15} value={formData.endDate} selected={formData.endDate} onChange={(endDate) => setFormData({ ...formData, endDate })} />
+            <Form.Group classname="mb-3" controlId="formBasicEndDate">
+                <Form.Label>End Date and Time</Form.Label>
+                <DatePicker placeholderText="End Date" showTimeSelect timeIntervals={15} value={formData.endDate} selected={formData.endDate} dateFormat="MMMM d, yyyy h:mm aa" onChange={(endDate) => setFormData({ ...formData, endDate })} />
+            </Form.Group>
 
-                <label>Street address and city/town: </label>
-                <input type="text" placeholder="Location" name="location" value={formData.location} onChange={handleChange} />
+            <Form.Group classname="mb-3" controlId="formBasicLocation">
+                <Form.Label>Location Street and City/Town</Form.Label>
+                <Form.Control type="text" placeholder="Enter street and city/town" name="location" value={formData.location} onChange={handleChange}/>
+            </Form.Group>
 
-                <label>Zipcode: </label>
-                <input type="text" placeholder="zipcode" name="zipcode" value={formData.zipcode} onChange={handleChange} />
+            <Form.Group classname="mb-3" controlId="formBasicZipcode">
+                <Form.Label>Zipcode</Form.Label>
+                <Form.Control type="text" placeholder="Enter zipcode" name="zipcode" value={formData.zipcode} onChange={handleChange}/>
+            </Form.Group>
 
-                <label>Description: </label> 
-                <input type="text-area" placeholder="Description" name="description" value={formData.description}  onChange={handleChange} />
+            <Form.Group classname="mb-3" controlId="formBasicDescription">
+                <Form.Label>Description</Form.Label>
+                <Form.Control type="text" placeholder="Enter description" name="description" value={formData.description} onChange={handleChange}/>
+            </Form.Group>
 
-                <button style={{ marginTop: "10px" }} onClick={handleSubmit}>
-                    Submit
-                </button>
-          </form>
+            <Button onClick={handleSubmit} variant="primary" type="submit">
+                Submit
+            </Button>
+
+        </Form>
         </>
     )
 }

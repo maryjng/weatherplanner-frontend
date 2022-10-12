@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { STORETOKEN } from "../App";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 
 function Login({ login }) {
     const navigate = useNavigate()
@@ -29,15 +31,22 @@ function Login({ login }) {
     }
 
     return(
-        <form onSubmit={handleSubmit}>
-            <label>Username</label>
-            <input type="text" name="username" value={formData.username} placeholder="username" onChange={handleChange} />
+        <Form>
+            <Form.Group classname="mb-3" controlId="formBasicUsername">
+                <Form.Label>Username</Form.Label>
+                <Form.Control type="text" name="username" value={formData.username} onChange={handleChange} />
+            </Form.Group>
 
-            <label>Password</label>
-            <input type="password" name="password" value={formData.password} placeholder="password" onChange={handleChange} />
+            <Form.Group classname="mb-3" controlId="formBasicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control type="password" name="password" value={formData.password} onChange={handleChange} />
+            </Form.Group>
 
-            <button type="submit" onSubmit={handleSubmit}>Login</button>
-        </form>
+            <Button onClick={handleSubmit} variant="primary" type="submit">
+                Login
+            </Button>
+
+        </Form>
     )
 }
 
