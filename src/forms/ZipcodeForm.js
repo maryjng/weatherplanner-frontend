@@ -28,11 +28,11 @@ function ZipcodeForm({ getForecast }) {
             <label>Location Zipcode: </label>
             <input type="text" name="zipcode" value={formData.zipcode} onChange={handleChange} />
 
-            <label> Temperature Unit: </label>
+            {/* <label> Temperature Unit: </label>
             <select name="tempUnit" value={formData.tempUnit} onChange={handleChange}>
                 <option value="celcius">Celcius</option>
                 <option value="fahrenheit">Fahrenheit</option>
-            </select>
+            </select> */}
 
             <button type="submit" onClick={handleSubmit}>Get Forecast</button>
         </form>
