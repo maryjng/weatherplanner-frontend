@@ -7,11 +7,18 @@ function ForecastDay({ min_temp, max_temp, weather, date, tempUnit }) {
     // to convert the weekday integer representation into the actual word
     const weekday = ["Sun", "Mon","Tues","Wed","Thurs","Fri","Sat"];
 
+    if (tempUnit) {
+        tempUnit = "°F"
+    } else {
+        tempUnit = "°C"
+    }
+
     //keep d as a date object or RBC will crash
     let d = new Date(`${date}`);
     let day = weekday[d.getDay()];
     date = date.slice(0, 10)
 
+    //for now, the tempUnit is °F
     return(
     <div>
         <div className="forecast-day">
