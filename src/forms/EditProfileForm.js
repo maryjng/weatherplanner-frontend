@@ -50,32 +50,35 @@ function EditProfileForm() {
     }
 
     return(
-        <Form>
-            <Form.Group classname="mb-3" controlId="formBasicEmail">
-                <Form.Label>New Email</Form.Label>
-                <Form.Control type="text" placeholder="Enter new email" name="email" value={formData.email} onChange={handleChange}/>
-            </Form.Group>
+        <div style={{marginLeft: "5%"}}>
+            <h2>Editing {currentUser}'s Profile</h2>
+            <Form style={{width: "20%"}}>
+                <Form.Group classname="mb-3" controlId="formBasicEmail">
+                    <Form.Label>New Email</Form.Label>
+                    <Form.Control type="text" placeholder="Enter new email" name="email" value={formData.email} onChange={handleChange}/>
+                </Form.Group>
 
-            <Form.Group classname="mb-3" controlId="formBasicNewPassword">
-                <Form.Label>New Password</Form.Label>
-                <Form.Control type="password" placeholder="Enter new password" name="newPassword" value={formData.newPassword} onChange={handleChange} />
-            </Form.Group>
+                <Form.Group classname="mb-3" controlId="formBasicNewPassword">
+                    <Form.Label>New Password</Form.Label>
+                    <Form.Control type="password" placeholder="Enter new password" name="newPassword" value={formData.newPassword} onChange={handleChange} />
+                </Form.Group>
 
-            <Form.Group classname="mb-3" controlId="formBasicNewPasswordReenter">
-                <Form.Label>Reenter New Password</Form.Label>
-                <Form.Control type="password" placeholder="Reenter new password" name="newPasswordReenter" value={formData.newPasswordReenter} onChange={handleChange} />
-            </Form.Group>
+                <Form.Group classname="mb-3" controlId="formBasicNewPasswordReenter">
+                    <Form.Label>Reenter New Password</Form.Label>
+                    <Form.Control type="password" placeholder="Reenter new password" name="newPasswordReenter" value={formData.newPasswordReenter} onChange={handleChange} />
+                </Form.Group>
 
-            <Form.Group classname="mb-3" controlId="formcurrPassword">
-                <Form.Label>Current Password</Form.Label>
-                <Form.Control type="password" placeholder="Enter current password to confirm" name="currPassword" value={formData.currPassword} onChange={handleChange}/>
-            </Form.Group>
+                <Form.Group classname="mb-3" controlId="formcurrPassword">
+                    <Form.Label>Current Password</Form.Label>
+                    <Form.Control type="password" placeholder="Enter current password to confirm" name="currPassword" value={formData.currPassword} onChange={handleChange}/>
+                </Form.Group>
 
-            <Button onClick={handleSubmit} variant="primary" type="submit">
-                Update Profile
-            </Button>
+                <Button onClick={handleSubmit} variant="primary" type="submit" style={{marginTop: "10px"}}>
+                    Update Profile
+                </Button>
 
-        </Form>
+            </Form>
+        </div>
     )
 }
 

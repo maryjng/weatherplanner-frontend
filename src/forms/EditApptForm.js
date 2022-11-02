@@ -1,15 +1,15 @@
-import React, { useContext, useState } from "react"
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react"
+// import { useNavigate } from "react-router-dom";
 import UserContext from "../UserContext"
 import PlannerApi from "../api"
 import DatePicker from "react-datepicker";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./DatePicker.css";
+import moment from 'moment';
 
 
-function EditApptForm({handleEditEvent, appt_id}) {
-    const navigate = useNavigate()
+function EditApptForm({handleEditEvent, apptDetails, setApptDetails, setApptForecast, appt_id, updateForecast}) {
     const { currentUser } = useContext(UserContext)
 
     const [formData, setFormData] = useState({ 
@@ -21,13 +21,43 @@ function EditApptForm({handleEditEvent, appt_id}) {
         zipcode: "", 
         description: "" });
 
+    //whenever the appt details change, update the forecast
+    // useEffect(() => {
+    //     updateForecast()
+    // }, [apptDetails])
+
+    //add back offset to db-stored UTC datetime
+    function convToDateAndTime(t) {
+        let d = new Date()
+        const o = d.getTimezoneOffset()
+
+        t = moment(t)
+        t.subtract(o, 'm')
+        return t.toString()
+    }
+
     async function handleSubmit(e) {
         e.preventDefault()
-        // setFormData(data => ({ ...data, "username": currentUser}))
 
-        let editAppt = await PlannerApi.updateAppt(appt_id, formData)
-        handleEditEvent(editAppt)
-        
+        //test zipcode regex - 5 digits
+        const re = /(^\d{5}$)/;
+        if (formData.zipcode === "" || (re.test(formData.zipcode))) {
+            let editAppt = await PlannerApi.updateAppt(appt_id, formData)
+            handleEditEvent(editAppt)
+                
+            //update the selected appointment's details
+            let updatedAppt = await PlannerApi.getAppt(appt_id)
+
+            //convert from UTC back to local time
+            updatedAppt.startdate = convToDateAndTime(updatedAppt.startdate)
+            updatedAppt.enddate = convToDateAndTime(updatedAppt.enddate)
+
+            await setApptDetails(updatedAppt)
+            
+        } else {
+            alert("Invalid zipcode.")
+        }
+
         setFormData({
             username: currentUser,
             title: "", 
@@ -37,7 +67,6 @@ function EditApptForm({handleEditEvent, appt_id}) {
             zipcode: "",
             description: "" 
         })
-        navigate("/calendar/view", { replace: true });
     }
 
     function handleChange(e){
@@ -47,11 +76,6 @@ function EditApptForm({handleEditEvent, appt_id}) {
             [name]: value
         }))
     }
-
-    // redirect if not logged in
-    // if (!currentUser) {
-    //     return <Redirect to="/login" />;
-    //   }
 
     return(
         <>
@@ -87,7 +111,7 @@ function EditApptForm({handleEditEvent, appt_id}) {
                 <Form.Control type="text" placeholder="Enter description" name="description" value={formData.description} onChange={handleChange}/>
             </Form.Group>
 
-            <Button onClick={handleSubmit} variant="primary" type="submit">
+            <Button onClick={handleSubmit} variant="primary" type="submit" style={{marginTop: "10px"}}>
                 Submit
             </Button>
 

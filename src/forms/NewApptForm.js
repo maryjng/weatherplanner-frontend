@@ -6,7 +6,6 @@ import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import "./DatePicker.css";
 
-
 function NewApptForm({handleAddEvent}) {
     const { currentUser } = useContext(UserContext)
 
@@ -22,12 +21,16 @@ function NewApptForm({handleAddEvent}) {
     async function handleSubmit(e) {
         e.preventDefault()
 
-        let newAppt = await PlannerApi.addAppt(formData)
-
-        console.log(newAppt)
-        await handleAddEvent(newAppt)
-        await saveForecast(newAppt.id)
-        
+        //test zipcode regex - 5 digits
+        const re = /(^\d{5}$)/;
+        if (re.test(formData.zipcode)) {
+            let newAppt = await PlannerApi.addAppt(formData)
+            await handleAddEvent(newAppt)
+            await saveForecast(newAppt.id)
+            } else {
+            alert("Invalid zipcode.")
+        }
+   
         setFormData({
             username: currentUser,
             title: "", 
@@ -37,8 +40,6 @@ function NewApptForm({handleAddEvent}) {
             zipcode: "",
             description: "" 
         })
-
-
     }
 
     function handleChange(e){
@@ -54,23 +55,15 @@ function NewApptForm({handleAddEvent}) {
             "startDate": formData.startDate,
             "endDate": formData.endDate,
             "zipcode": formData.zipcode,
-            //for now
             "tempUnit": "fahrenheit"
         }
         //get the api response data, ready for db insertion 
-        console.log(req)
         let res = await PlannerApi.getForecast(req)
-        console.log(res)
 
         for (const key in res) {
             PlannerApi.addForecast(appt_id, res[key])
         }
     }
-
-    // redirect if not logged in
-    // if (!currentUser) {
-    //     return <Redirect to="/login" />;
-    //   }
 
     return(
         <>
@@ -82,7 +75,7 @@ function NewApptForm({handleAddEvent}) {
 
             <Form.Group classname="mb-3" controlId="formBasicStartDate">
                 <Form.Label>Start Date and Time</Form.Label>
-                <DatePicker placeholderText="Start Date" showTimeSelect timeIntervals={15} value={formData.startDate} selected={formData.startDate} dateFormat="MMMM d, yyyy h:mm aa" onChange={(startDate) => setFormData({ ...formData, startDate })} style={{width:"100%"}} />
+                <DatePicker placeholderText="Start Date" showTimeSelect timeIntervals={15} value={formData.startDate} selected={formData.startDate} dateFormat="MMMM d, yyyy h:mm aa" onChange={(startDate) => setFormData({ ...formData, startDate })} />
             </Form.Group>
 
             <Form.Group classname="mb-3" controlId="formBasicEndDate">

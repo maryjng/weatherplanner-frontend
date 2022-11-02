@@ -6,13 +6,22 @@ import PlannerApi from "../api"
 function ZipcodeForm({ getForecast }) {
     const [formData, setFormData] = useState({ 
         zipcode: "",
-        tempUnit: "celcius"
     })
 
     async function handleSubmit(e) {
         e.preventDefault()
-        console.log(`FORM DATA: ${formData.zipcode} ${formData.tempUnit}`)
-        await getForecast(formData)
+
+        //test zipcode regex - 5 digits
+        const re = /(^\d{5}$)/;
+        if (re.test(formData.zipcode)) {
+            await getForecast(formData)
+        } else {
+            alert("Invalid zipcode.")
+        }
+
+        setFormData({
+            zipcode: "",
+        })
     }
 
     function handleChange(e) {
@@ -28,13 +37,7 @@ function ZipcodeForm({ getForecast }) {
             <label>Location Zipcode: </label>
             <input type="text" name="zipcode" value={formData.zipcode} onChange={handleChange} />
 
-            {/* <label> Temperature Unit: </label>
-            <select name="tempUnit" value={formData.tempUnit} onChange={handleChange}>
-                <option value="celcius">Celcius</option>
-                <option value="fahrenheit">Fahrenheit</option>
-            </select> */}
-
-            <button type="submit" onClick={handleSubmit}>Get Forecast</button>
+            <button type="submit" onClick={handleSubmit}>Get 7 Day Forecast</button>
         </form>
     )
 }

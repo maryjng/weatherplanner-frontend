@@ -45,7 +45,7 @@ function Register({ register }) {
     }
 
     return(
-        <>
+        <div style={{marginLeft: "5%", width: "20%"}}>
         <h2>Register</h2>
         <Form>
             <Form.Group classname="mb-3" controlId="formBasicUsername">
@@ -55,12 +55,12 @@ function Register({ register }) {
 
             <Form.Group classname="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email</Form.Label>
-                <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} />
+                <Form.Control type="email" placeholder="Enter email" name="email" value={formData.email} onChange={handleChange} />
             </Form.Group>
 
             <Form.Group classname="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" name="password" value={formData.password} onChange={handleChange} />
+                <Form.Control type="password" placeholder="Enter password" name="password" value={formData.password} onChange={handleChange} />
             </Form.Group>
 
             <Form.Group classname="mb-3" controlId="formBasicPasswordReenter">
@@ -68,12 +68,12 @@ function Register({ register }) {
                 <Form.Control type="password" placeholder="Reenter password to confirm" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange}/>
             </Form.Group>
 
-            <Button onClick={handleSubmit} variant="primary" type="submit">
+            <Button onClick={handleSubmit} variant="primary" type="submit" style={{marginTop: "10px"}}>
                 Register
             </Button>
 
         </Form>
-        </>
+        </div>
     )
 }
 
