@@ -3,15 +3,9 @@ import "./ForecastDay.css"
 
 // this is the box representing a date and its forecast data in a week-long calendar-like view.
 
-function ForecastDay({ min_temp, max_temp, weather, date, tempUnit }) {
+function ForecastDay({ min_temp, max_temp, weather, date, fahrenheit, setFahrenheit }) {
     // to convert the weekday integer representation into the actual word
     const weekday = ["Sun", "Mon","Tues","Wed","Thurs","Fri","Sat"];
-
-    if (tempUnit) {
-        tempUnit = "°F"
-    } else {
-        tempUnit = "°C"
-    }
 
     //keep d as a date object or RBC will crash
     let d = new Date(`${date}`);
@@ -26,8 +20,8 @@ function ForecastDay({ min_temp, max_temp, weather, date, tempUnit }) {
                 <div>{date}</div>
             </h6>
             <p><img src=""></img>{weather}</p>
-            <p className="high">{max_temp}{tempUnit}</p>
-            <p className="low">{min_temp}{tempUnit}</p>
+            <p className="high">{max_temp}°F</p>
+            <p className="low">{min_temp}°F</p>
         </div>
     </div>
     )

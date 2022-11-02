@@ -1,4 +1,3 @@
-import ShowCalendar from "./ShowCalendar"
 import NewApptForm from "./forms/NewApptForm";
 import ForecastCalendar from "./ForecastDisplay/ForecastCalendar";
 import ZipcodeForm from "./forms/ZipcodeForm"
@@ -10,9 +9,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 
-function AddApptCalendar({handleAddEvent, allEvents}) {
+function AddApptCalendar({handleAddEvent, fahrenheit, toggleTempUnit}) {
     const [forecast, setForecast] = useState([])
-      //need {zipcode, tempUnit=fahrenheit} 
+      //need {zipcode}
     async function getForecast(data) {
         let results = await PlannerApi.getForecast(data)
 
@@ -25,15 +24,16 @@ function AddApptCalendar({handleAddEvent, allEvents}) {
 
   return(
     <>
-        <ShowCalendar allEvents={allEvents} />
-
         <Container>
           <Row>
-            <Col sm={8} style={{left: "10px"}}>
+            <Col sm={7} style={{left: "10px"}}>
+              <h3>Step One: Enter Zipcode to Get Forecast</h3>
+              <p>Use the forecast to decide where and when your appointment will be.</p>
               <ZipcodeForm getForecast={getForecast} />
-              <ForecastCalendar displayForecast={forecast} />
+              <ForecastCalendar displayForecast={forecast} fahrenheit={fahrenheit} toggleTempUnit={toggleTempUnit} />
             </Col>
-            <Col sm={4}>
+            <Col sm={5}>
+              <h3>Step Two: Confirm Appointment</h3>
               <NewApptForm handleAddEvent={handleAddEvent} />
             </Col>
           </Row>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route} from "react-router-dom";
 import PlannerApi from "./api";
 import HomeCalendar from "./HomeCalendar";
-import AddApptCalendar from "./AddApptCalendar";
+import moment from 'moment';
 import Home from "./Home";
 import CalNavbar from "./CalNavbar"
 import UserContext from "./UserContext"
@@ -21,15 +21,16 @@ function App() {
   const [allEvents, setAllEvents] = useState("")
 
   function handleAddEvent(newAppt) {
-      setAllEvents(allEvents => [...allEvents, newAppt]);
+    //convert event for RBC to read
+    let newCalAppt = convertEventForCalendar(newAppt)
+    setAllEvents(allEvents => [...allEvents, newCalAppt]);
   }
 
   function handleEditEvent(editAppt) {
-    console.log(allEvents)
     let updatedEvents = allEvents.filter(e => e.id !== editAppt.id)
-    console.log(updatedEvents)
-    updatedEvents.push(editAppt)
-    console.log(updatedEvents)
+    //convert event for RBC to read
+    let editedEvent = convertEventForCalendar(editAppt)
+    updatedEvents.push(editedEvent)
     setAllEvents(updatedEvents)
   }
 
@@ -38,12 +39,22 @@ function App() {
     setAllEvents(updatedEvents)
   }
 
+   //add back offset to db-stored UTC datetime
+   function convToDateAndTime(t) {
+    let d = new Date()
+    const o = d.getTimezoneOffset()
+
+    t = moment(t)
+    t.subtract(o, 'm')
+    return t.toString()
+  }
+
   function convertEventForCalendar(event) {
     let { id, title, startdate, enddate, location, description, zipcode } = event
-    //convert to js date object for react big calendar to work with
-    startdate = new Date(startdate)
-    enddate = new Date(enddate)
-
+    //convert to js date object for react big calendar to work with while adding back timezone offset to database-queried UTC datetimes
+    startdate = convToDateAndTime(startdate)
+    enddate = convToDateAndTime(enddate)
+    
     let calendarEvent = {
       "id": id,
       "title": title,
@@ -71,9 +82,8 @@ function App() {
             let calendarEvents = res.appointments.map(function(e) {
               return convertEventForCalendar(e)
             })
-            console.log(calendarEvents)
             setAllEvents(calendarEvents)
-        }
+          }
         } catch (error) {
           console.log(error.stack)
           //if an error occurs, the user will have to login again
@@ -98,18 +108,18 @@ function App() {
   function logout() {
       setCurrentUser(null);
       setToken(null);
-    }
+  }
 
   return (
     <>
     <UserContext.Provider value={{currentUser, token}}>
       <BrowserRouter>
         <CalNavbar login={login} logout={logout} register={register} />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/calendar">
-            <Route path="/calendar/view" element={<HomeCalendar allEvents={allEvents} handleEditEvent={handleEditEvent} handleDeleteEvent={handleDeleteEvent} />} />
-            <Route path="/calendar/add" element={<AddApptCalendar handleAddEvent={handleAddEvent} allEvents={allEvents}/>} />
+            <Route path="/calendar/view" element={<HomeCalendar allEvents={allEvents} handleEditEvent={handleEditEvent} handleDeleteEvent={handleDeleteEvent} handleAddEvent={handleAddEvent} /> } />
           </Route>
 
           <Route path="/login" element={<Login login={login} />} />

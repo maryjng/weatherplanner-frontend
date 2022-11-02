@@ -1,27 +1,82 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ShowCalendar from "./ShowCalendar";
-import ApptDetail from "./ApptDetail";
-import EditApptForm from "./forms/EditApptForm";
-import PlannerApi from "./api";
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import format from "date-fns/format";
+import getDay from "date-fns/getDay";
+import parse from "date-fns/parse";
+import startOfWeek from "date-fns/startOfWeek";
 import moment from 'moment';
 
-function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent }) {
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import ViewEditAppt from "./ViewEditAppt";
+import AddApptCalendar from "./AddApptCalendar";
+import PlannerApi from "./api";
+import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import "react-datepicker/dist/react-datepicker.css";
+import Breadcrumb from "react-bootstrap/Breadcrumb"
+
+
+const locales = {
+    "en-US": require("date-fns/locale/en-US"),
+};
+
+const localizer = dateFnsLocalizer({
+    format,
+    parse,
+    startOfWeek,
+    getDay,
+    locales,
+});
+
+
+function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent, handleAddEvent }) {
     const navigate = useNavigate()
+
+    //handles whether to show F or C temp units. Stored here because child EditApptForm's handle submit needs to reset the unit to F (true)
+    const [fahrenheit, setFahrenheit] = useState(true)
+
+    //this handles whether add appointment interface is displayed or the view/edit appointment one is
+    const [displayAddAppt, setDisplayAddAppt] = useState(false)
     const [apptForecast, setApptForecast] = useState([])
-    const [apptDetails, setApptDetails] = useState("")
+    const [apptDetails, setApptDetails] = useState({
+        id: "",
+        username: "",
+        title: "",
+        startdate: "",
+        enddate: "",
+        location: "",
+        zipcode: "",
+        description: ""
+    })
+
+    //add back offset to db-stored UTC datetime
+    function convToDateAndTime(t) {
+        let d = new Date()
+        const o = d.getTimezoneOffset()
+
+        t = moment(t)
+        t.subtract(o, 'm')
+        return t.toString()
+    }
 
   // upon click of appt on calendar, fetch stored forecast and display it through apptForecast component. Takes the appt info and sets the state for apptDetails
     async function handleSelected(event) {
+
+        //bring up the ViewEditAppt component if it is not currently displayed
+        if (displayAddAppt) {
+            setDisplayAddAppt(false)
+        }
+
         let appt = await PlannerApi.getAppt(event.id)
-                
+        
         //adding back missing leading zeroes...
         if (appt.zipcode.length < 5) {
             appt.zipcode = ("0" * (5 - appt.zipcode.length)) + appt.zipcode
         } 
+
+        //HANDLING THE TIMEZONE OFFSET
+        appt.startdate = convToDateAndTime(appt.startdate)
+        appt.enddate = convToDateAndTime(appt.enddate)  
+
         setApptDetails(appt)
         let forecast = await PlannerApi.getApptForecast(event.id)
         setApptForecast(forecast)
@@ -37,22 +92,17 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent }) {
     async function updateForecast() {
         let today = new Date()
 
-        //make today the startDate if appt start date is before today (clears up the forecast and db and doesn't matter anyway)
-        let startDate = new Date(apptDetails.startdate.slice(0, 10))
-        if (startDate < today) {
-            startDate = today
-        }
+        // //make today the startDate if appt start date is before today (clears up the forecast and db and doesn't matter anyway)
+        let startDate = apptDetails.startdate < today ? today : apptDetails.startdate
 
         //clear all the old forecasts first
-        PlannerApi.deleteAllForecasts(apptDetails.id)
+        await PlannerApi.deleteAllForecasts(apptDetails.id)
 
         const res = await PlannerApi.getForecast({ 
             "zipcode": apptDetails.zipcode, 
-            "tempUnit": "fahrenheit", 
             "startDate": startDate, 
             "endDate": apptDetails.enddate
         })
-
         //save each day's forecast to db.
         //Checking if max_temp is included is a temp fix because for some reason the first day does not get any forecast results from the third party weather api
         for (const key in res) {
@@ -60,51 +110,40 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent }) {
             await PlannerApi.addForecast(apptDetails.id, res[key])
             }
         }
-
         //refresh the displayed forecast state
         const forecast = await PlannerApi.getApptForecast(apptDetails.id)
         setApptForecast(forecast)
     }
 
-    //add back offset to db-stored UTC datetime
-    function convToDateAndTime(t) {
-        let d = new Date()
-        const o = d.getTimezoneOffset()
-
-        t = moment(t)
-        t.subtract(o, 'm')
-        return t.toString()
+    function showAddApptForm() {
+        return(            
+            <AddApptCalendar handleAddEvent={handleAddEvent} fahrenheit={fahrenheit} />
+        )
     }
+
+    function showEditAndViewAppts() {
+        return (
+            <ViewEditAppt handleDelete={handleDelete} handleEditEvent={handleEditEvent} updateForecast={updateForecast} apptForecast={apptForecast} setApptForecast={setApptForecast} apptDetails={apptDetails} setApptDetails={setApptDetails} fahrenheit={fahrenheit} setFahrenheit={setFahrenheit} />
+        )
+    }
+
 
     return(
         <>
-            <ShowCalendar handleSelected={handleSelected} allEvents={allEvents} />
+            <Calendar localizer={localizer} events={allEvents} startAccessor="start" endAccessor="end" style={{ height: 500, margin: "50px" }} onSelectEvent={handleSelected} />
 
-            <Container>
-                <Row>
-                    <Col sm={7} style={{padding: "0px"}}>
-                        <h3>View Appointment Details and Saved Forecasts</h3>
-                        <p><i>Saved Forecasts</i></p>
-                        <button onClick={updateForecast}>Update Forecast</button>
-                        <ApptDetail apptForecast={apptForecast} />
-                         <div>
-                            <div>Title: {apptDetails.title}</div>
-                            <div>Start: {apptDetails.startdate ? convToDateAndTime(apptDetails.startdate) : ""}</div>
-                            <div>End: {apptDetails.enddate ? convToDateAndTime(apptDetails.enddate) : ""}</div>
-                            <div>Location: {apptDetails.location}</div>
-                            <div>Zipcode: {apptDetails.zipcode}</div>
-                            <div>Description:{apptDetails.description}</div>
-                        </div>
+            <Breadcrumb style={{marginLeft: "60px"}}>            
+                <Breadcrumb.Item onClick={() => setDisplayAddAppt(false)}>
+                    View and Edit Appointments
+                </Breadcrumb.Item>
 
-                        <div style={{alignContent: "right"}}>
-                            <button onClick={handleDelete} style={{marginTop: "10px"}}>Delete Appointment</button>
-                        </div>
-                    </Col>
-                    <Col sm={5}>
-                        <EditApptForm handleEditEvent={handleEditEvent} setApptDetails={setApptDetails} appt_id={apptDetails.id} />
-                    </Col>
-                </Row>
-            </Container>
+                <Breadcrumb.Item onClick={() => setDisplayAddAppt(true)}>
+                    Add Appointment
+                </Breadcrumb.Item>
+            </Breadcrumb>
+
+
+            { displayAddAppt ? showAddApptForm() : showEditAndViewAppts() }
         </>
     )
 }
