@@ -33,6 +33,9 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent, handleAdd
 
     //handles whether to show F or C temp units. Stored here because child EditApptForm's handle submit needs to reset the unit to F (true)
     const [fahrenheit, setFahrenheit] = useState(true)
+    const toggleFahrenheit = () => {
+        setFahrenheit(val => !val)
+    }
 
     //this handles whether add appointment interface is displayed or the view/edit appointment one is
     const [displayAddAppt, setDisplayAddAppt] = useState(false)
@@ -123,7 +126,7 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent, handleAdd
 
     function showEditAndViewAppts() {
         return (
-            <ViewEditAppt handleDelete={handleDelete} handleEditEvent={handleEditEvent} updateForecast={updateForecast} apptForecast={apptForecast} setApptForecast={setApptForecast} apptDetails={apptDetails} setApptDetails={setApptDetails} fahrenheit={fahrenheit} setFahrenheit={setFahrenheit} />
+            <ViewEditAppt handleDelete={handleDelete} handleEditEvent={handleEditEvent} updateForecast={updateForecast} apptForecast={apptForecast} setApptForecast={setApptForecast} apptDetails={apptDetails} setApptDetails={setApptDetails} fahrenheit={fahrenheit} setFahrenheit={setFahrenheit} toggleFahrenheit={toggleFahrenheit} />
         )
     }
 

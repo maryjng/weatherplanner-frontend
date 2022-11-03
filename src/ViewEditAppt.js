@@ -7,11 +7,12 @@ import EditApptForm from "./forms/EditApptForm";
 import Button from "react-bootstrap/Button"
 
 
-function ViewEditAppt({handleDelete, handleEditEvent, updateForecast, apptDetails, apptForecast, setApptForecast, setApptDetails, toggleTempUnit, fahrenheit, setFahrenheit}) {
+function ViewEditAppt({handleDelete, handleEditEvent, updateForecast, apptDetails, apptForecast, setApptForecast, setApptDetails, toggleFahrenheit, fahrenheit, setFahrenheit}) {
 
-    function handleRefreshClick() {
-        updateForecast()
+    //change fahrenheit back to true as it is the default unit, then update forecast 
+    async function handleRefreshClick() {
         setFahrenheit(true)
+        await updateForecast()
     }
 
     return(
@@ -22,7 +23,7 @@ function ViewEditAppt({handleDelete, handleEditEvent, updateForecast, apptDetail
                     <p>Saved forecasts for the appointment are shown below. To get the most recent forecast, click the Update Forecast button. Doing so will delete forecasts from before today as well. Please note that forecasts are only available for up to 7 days from today.</p>
                     <Button variant="outline-secondary" size="sm" onClick={handleRefreshClick}>Refresh Forecast</Button>
 
-                    <ForecastCalendar displayForecast={apptForecast} fahrenheit={fahrenheit} setFahrenheit={setFahrenheit} />
+                    <ForecastCalendar displayForecast={apptForecast} fahrenheit={fahrenheit} toggleFahrenheit={toggleFahrenheit} />
 
                     <div>
                         <div>Title: {apptDetails.title}</div>
@@ -38,7 +39,7 @@ function ViewEditAppt({handleDelete, handleEditEvent, updateForecast, apptDetail
                     </div>
                 </Col>
                 <Col sm={5}>
-                    <EditApptForm handleEditEvent={handleEditEvent} apptDetails={apptDetails} setApptDetails={setApptDetails} appt_id={apptDetails.id} updateForecast={updateForecast} setApptForecast={setApptForecast} />
+                    <EditApptForm handleEditEvent={handleEditEvent} apptDetails={apptDetails} setApptDetails={setApptDetails} appt_id={apptDetails.id} updateForecast={updateForecast} setApptForecast={setApptForecast} setFahrenheit={setFahrenheit} />
                 </Col>
             </Row>
         </Container>

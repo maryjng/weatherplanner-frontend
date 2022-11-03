@@ -9,7 +9,7 @@ import "./DatePicker.css";
 import moment from 'moment';
 
 
-function EditApptForm({handleEditEvent, apptDetails, setApptDetails, setApptForecast, appt_id, updateForecast}) {
+function EditApptForm({handleEditEvent, setApptDetails, appt_id, updateForecast, setFahrenheit}) {
     const { currentUser } = useContext(UserContext)
 
     const [formData, setFormData] = useState({ 
@@ -53,7 +53,10 @@ function EditApptForm({handleEditEvent, apptDetails, setApptDetails, setApptFore
             updatedAppt.enddate = convToDateAndTime(updatedAppt.enddate)
 
             await setApptDetails(updatedAppt)
-            
+
+            await updateForecast()
+            setFahrenheit(true)      
+
         } else {
             alert("Invalid zipcode.")
         }
