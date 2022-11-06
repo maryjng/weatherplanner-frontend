@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { BrowserRouter, Routes, Route} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import PlannerApi from "./api";
 import HomeCalendar from "./HomeCalendar";
 import moment from 'moment';
@@ -52,8 +52,8 @@ function App() {
   function convertEventForCalendar(event) {
     let { id, title, startdate, enddate, location, description, zipcode } = event
     //convert to js date object for react big calendar to work with while adding back timezone offset to database-queried UTC datetimes
-    startdate = convToDateAndTime(startdate)
-    enddate = convToDateAndTime(enddate)
+    startdate = new Date(convToDateAndTime(startdate))
+    enddate = new Date(convToDateAndTime(enddate))
     
     let calendarEvent = {
       "id": id,
@@ -96,8 +96,12 @@ function App() {
   );
 
   async function login(data) {
-    let token = await PlannerApi.login(data)
-    setToken(token);
+    try {
+      let token = await PlannerApi.login(data)
+      setToken(token);
+    } catch(e) {
+      alert(e)
+    }
   }
 
   async function register(data) {
@@ -110,6 +114,8 @@ function App() {
       setToken(null);
   }
 
+  //going to /calendar/view will redirect to login if user is not logged in. Otherwise, HomeCalendar is rendered.
+
   return (
     <>
     <UserContext.Provider value={{currentUser, token}}>
@@ -119,7 +125,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/calendar">
-            <Route path="/calendar/view" element={<HomeCalendar allEvents={allEvents} handleEditEvent={handleEditEvent} handleDeleteEvent={handleDeleteEvent} handleAddEvent={handleAddEvent} /> } />
+            <Route path="/calendar/view" element={ currentUser ? 
+            <HomeCalendar allEvents={allEvents} handleEditEvent={handleEditEvent} handleDeleteEvent={handleDeleteEvent} handleAddEvent={handleAddEvent} /> : <Navigate to="/login" /> } />
           </Route>
 
           <Route path="/login" element={<Login login={login} />} />

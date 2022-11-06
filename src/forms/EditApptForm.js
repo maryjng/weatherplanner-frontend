@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react"
-// import { useNavigate } from "react-router-dom";
 import UserContext from "../UserContext"
 import PlannerApi from "../api"
 import DatePicker from "react-datepicker";
@@ -9,7 +8,7 @@ import "./DatePicker.css";
 import moment from 'moment';
 
 
-function EditApptForm({handleEditEvent, setApptDetails, appt_id, updateForecast, setFahrenheit}) {
+function EditApptForm({handleEditEvent, apptDetails, setApptDetails, setApptForecast, appt_id, updateForecast, setFahrenheit}) {
     const { currentUser } = useContext(UserContext)
 
     const [formData, setFormData] = useState({ 
@@ -21,10 +20,15 @@ function EditApptForm({handleEditEvent, setApptDetails, appt_id, updateForecast,
         zipcode: "", 
         description: "" });
 
-    //whenever the appt details change, update the forecast
-    // useEffect(() => {
-    //     updateForecast()
-    // }, [apptDetails])
+    //update the forecast display whenever apptDetails updates
+    useEffect(() => {
+        console.log("useEffect")
+        async function updateForecastDisplay() {
+            await updateForecast()
+        }
+        updateForecastDisplay()
+    }, [apptDetails])
+
 
     //add back offset to db-stored UTC datetime
     function convToDateAndTime(t) {
@@ -39,9 +43,13 @@ function EditApptForm({handleEditEvent, setApptDetails, appt_id, updateForecast,
     async function handleSubmit(e) {
         e.preventDefault()
 
-        //test zipcode regex - 5 digits
-        const re = /(^\d{5}$)/;
-        if (formData.zipcode === "" || (re.test(formData.zipcode))) {
+        //test zipcode regex - 5 digits. Only takes 6 to 9 for the third digit. Excludes 00600 completely.
+        const re = /(^\d{2}[6-9]\d{2}$)/;
+        try {
+            if (!(formData.zipcode === "" || ((re.test(formData.zipcode)) && formData.zipcode !== '00600'))) {
+                throw "Invalid Zipcode";
+            }
+
             let editAppt = await PlannerApi.updateAppt(appt_id, formData)
             handleEditEvent(editAppt)
                 
@@ -52,24 +60,24 @@ function EditApptForm({handleEditEvent, setApptDetails, appt_id, updateForecast,
             updatedAppt.startdate = convToDateAndTime(updatedAppt.startdate)
             updatedAppt.enddate = convToDateAndTime(updatedAppt.enddate)
 
-            await setApptDetails(updatedAppt)
+            setApptDetails(updatedAppt)
 
-            await updateForecast()
+            // await updateForecast()
             setFahrenheit(true)      
 
-        } else {
-            alert("Invalid zipcode.")
-        }
+            setFormData({
+                username: currentUser,
+                title: "", 
+                startDate: "", 
+                endDate: "", 
+                location: "", 
+                zipcode: "",
+                description: "" 
+            })
 
-        setFormData({
-            username: currentUser,
-            title: "", 
-            startDate: "", 
-            endDate: "", 
-            location: "", 
-            zipcode: "",
-            description: "" 
-        })
+        } catch (error) {
+            alert("Changes failed. Please check your input. Make sure start date is before end date.")
+        } 
     }
 
     function handleChange(e){

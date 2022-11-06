@@ -9,8 +9,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 
-function AddApptCalendar({handleAddEvent, fahrenheit, toggleTempUnit}) {
+function AddApptCalendar({handleAddEvent, fahrenheit, setFahrenheit, toggleFahrenheit}) {
     const [forecast, setForecast] = useState([])
+    
       //need {zipcode}
     async function getForecast(data) {
         let results = await PlannerApi.getForecast(data)
@@ -20,19 +21,16 @@ function AddApptCalendar({handleAddEvent, fahrenheit, toggleTempUnit}) {
         setForecast(resArr) 
     }
 
-    //save forecasts along with new appointment if zipcode is the same
-
   return(
     <>
         <Container>
           <Row>
-            <Col sm={7} style={{left: "10px"}}>
+            <Col sm={8} style={{left: "10px"}}>
               <h3>Step One: Enter Zipcode to Get Forecast</h3>
               <p>Use the forecast to decide where and when your appointment will be.</p>
-              <ZipcodeForm getForecast={getForecast} />
-              <ForecastCalendar displayForecast={forecast} fahrenheit={fahrenheit} toggleTempUnit={toggleTempUnit} />
-            </Col>
-            <Col sm={5}>
+              <ZipcodeForm getForecast={getForecast} setFahrenheit={setFahrenheit} />
+              <ForecastCalendar displayForecast={forecast} fahrenheit={fahrenheit} toggleFahrenheit={toggleFahrenheit} />            </Col>
+            <Col sm={4}>
               <h3>Step Two: Confirm Appointment</h3>
               <NewApptForm handleAddEvent={handleAddEvent} />
             </Col>

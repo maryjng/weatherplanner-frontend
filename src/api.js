@@ -45,12 +45,12 @@ class PlannerApi {
   }
 
   //Update user email and/or password
-  static async update(username, data) {
-    let res = await this.request(`users/${username}`, data, "patch")
+  static async update(data) {
+    let res = await this.request(`users/${data.username}`, data, "patch")
     return res;
   }
 
-
+  
 ////////////////////////////APPOINTMENTS////////////
   //Get user appointments only
   static async getUserAppts(username) {
@@ -107,6 +107,12 @@ class PlannerApi {
     let res = await this.request(`appointments/${appt_id}/forecast/${id}`, "delete")
     return res;
   }
+
+  //Delete all forecasts for appt of appt_id
+  static async deleteAllForecasts(appt_id) {
+    let res = await this.request(`appointments/${appt_id}/forecast`, {}, "delete")
+    return res;
+  }
   
 
 //////////////////// WEATHER API FORECAST //////////////
@@ -123,7 +129,6 @@ class PlannerApi {
 // isoDate is yyyy-mm-dd
   static async getForecast(data) {
     let res = await this.request(`weatherapi`, { data }, "post")
-    console.log(res)
     return res;
   }
 }

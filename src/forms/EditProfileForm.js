@@ -19,10 +19,12 @@ function EditProfileForm() {
 
     const [formData, setFormData] = useState(DEFAULT_STATE)
 
+    //sending patch request with body {currPassword, password, email }
     async function handleSubmit(e){
         e.preventDefault()
         try {
             let data = {
+                "username": currentUser,
                 "currPassword": formData.currPassword
             }
             //if password is being updated, make sure new password and its confirmation field match
@@ -31,13 +33,15 @@ function EditProfileForm() {
             }
             if (formData.email.length >= 6) {
                 data.email = formData.email
-            }
+            } 
 
-            await PlannerApi.update(currentUser, data)
+            await PlannerApi.update(data)
             setFormData(DEFAULT_STATE)
 
         } catch(e) {
             console.log(e)
+            alert("Update failed. Please check inputs.")
+            setFormData(DEFAULT_STATE)
         }
     }
 

@@ -21,25 +21,33 @@ function NewApptForm({handleAddEvent}) {
     async function handleSubmit(e) {
         e.preventDefault()
 
-        //test zipcode regex - 5 digits
-        const re = /(^\d{5}$)/;
-        if (re.test(formData.zipcode)) {
+        //check zipcode
+        const re = /(^\d{2}[6-9]\d{2}$)/;
+
+        try {
+            //check if start date is after end date
+            if (Date.parse(`${formData.startDate}`) > Date.parse(`${formData.endDate}`)) {
+                throw "Start date cannot be after end date";
+            }
+            if (!(re.test(formData.zipcode))) throw "Invalid zipcode"
+
             let newAppt = await PlannerApi.addAppt(formData)
             await handleAddEvent(newAppt)
             await saveForecast(newAppt.id)
-            } else {
-            alert("Invalid zipcode.")
+
+            setFormData({
+                username: currentUser,
+                title: "", 
+                startDate: "", 
+                endDate: "", 
+                location: "", 
+                zipcode: "",
+                description: "" 
+            })
+        } catch(e) {
+            console.log(e)
+            alert(`Creation failed. ${e}`)
         }
-   
-        setFormData({
-            username: currentUser,
-            title: "", 
-            startDate: "", 
-            endDate: "", 
-            location: "", 
-            zipcode: "",
-            description: "" 
-        })
     }
 
     function handleChange(e){

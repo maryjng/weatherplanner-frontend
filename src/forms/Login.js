@@ -8,6 +8,8 @@ import Button from "react-bootstrap/Button";
 function Login({ login }) {
     const { currentUser } = useContext(UserContext)
     const navigate = useNavigate()
+    const [error, setError] = useState("")
+
     const [formData, setFormData] = useState({
         username:"",
         password:""
@@ -16,15 +18,6 @@ function Login({ login }) {
     function handleSubmit(e){
         e.preventDefault()
         login(formData)
-
-        //redirect to calendar page if successful
-        // if (currentUser) {
-        //     navigate("/calendar/view", { replace: true });
-        // } else { 
-        //     //if not then back to login
-        //     navigate("/login", { replace: true })
-        // }
-
         setFormData({
             username:"",
             password:""
@@ -38,6 +31,13 @@ function Login({ login }) {
             [name]: value
         }))
     }
+
+    //redirect to calendar view upon successful login
+    useEffect(() => {
+        if (currentUser) {
+            navigate("/calendar/view", { replace: true });
+        }
+    }, [currentUser])
 
     return(
         <div style={{marginLeft: "5%", width: "20%"}}>

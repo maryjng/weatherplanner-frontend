@@ -4,8 +4,9 @@ import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import moment from 'moment';
 
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { useNavigate} from "react-router-dom";
+import UserContext from "./UserContext";
 import ViewEditAppt from "./ViewEditAppt";
 import AddApptCalendar from "./AddApptCalendar";
 import PlannerApi from "./api";
@@ -30,6 +31,7 @@ const localizer = dateFnsLocalizer({
 
 function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent, handleAddEvent }) {
     const navigate = useNavigate()
+    const { currentUser } = useContext(UserContext)
 
     //handles whether to show F or C temp units. Stored here because child EditApptForm's handle submit needs to reset the unit to F (true)
     const [fahrenheit, setFahrenheit] = useState(true)
@@ -51,6 +53,10 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent, handleAdd
         description: ""
     })
 
+    if (!currentUser) {
+        navigate("/login", { replace: true })
+    }
+
     //add back offset to db-stored UTC datetime
     function convToDateAndTime(t) {
         let d = new Date()
@@ -61,7 +67,7 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent, handleAdd
         return t.toString()
     }
 
-  // upon click of appt on calendar, fetch stored forecast and display it through apptForecast component. Takes the appt info and sets the state for apptDetails
+    // upon click of appt on calendar, fetch stored forecast and display it through apptForecast component. Takes the appt info and sets the state for apptDetails
     async function handleSelected(event) {
 
         //bring up the ViewEditAppt component if it is not currently displayed
@@ -107,7 +113,7 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent, handleAdd
             "endDate": apptDetails.enddate
         })
         //save each day's forecast to db.
-        //Checking if max_temp is included is a temp fix because for some reason the first day does not get any forecast results from the third party weather api
+        //Checking if max_temp is included
         for (const key in res) {
             if (res[key].max_temp) {
             await PlannerApi.addForecast(apptDetails.id, res[key])
@@ -120,7 +126,7 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent, handleAdd
 
     function showAddApptForm() {
         return(            
-            <AddApptCalendar handleAddEvent={handleAddEvent} fahrenheit={fahrenheit} />
+            <AddApptCalendar handleAddEvent={handleAddEvent} fahrenheit={fahrenheit} setFahrenheit={setFahrenheit} toggleFahrenheit={toggleFahrenheit} />
         )
     }
 

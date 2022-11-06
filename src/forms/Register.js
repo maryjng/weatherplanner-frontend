@@ -16,23 +16,25 @@ function Register({ register }) {
 
     async function handleSubmit(e){
         e.preventDefault()
-        if (formData.password === formData.confirmPassword) {
+        try {
+            //check if passwords match. If yes then delete confirmPassword before sending request
+            if (formData.password !== formData.confirmPassword) {
+                throw "Passwords do not match"
+            } 
+            delete formData.confirmPassword
+
             await register(formData);
             setFormData({
                 username:"",
                 password:"",
                 email: ""
             })
-            //redirect to "/"
-            navigate("/", { replace: true });
-        } else {
-            alert("Passwords do not match.")
-            setFormData({
-                username:"",
-                password:"",
-                email: "",
-                confirmPassword: ""
-            })
+
+            //redirect to login
+            navigate("/login", { replace: true });
+
+        } catch (error) {
+            alert(error)
         }
     }
 

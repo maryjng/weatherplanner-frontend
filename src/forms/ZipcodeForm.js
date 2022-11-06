@@ -3,7 +3,7 @@ import PlannerApi from "../api"
 
 // FORM FOR GETTING FORECAST FOR GIVEN ZIPCODE SO USERS CAN VIEW FORECAST WHILE MAKING/EDITING AN APPOINTMENT
 
-function ZipcodeForm({ getForecast }) {
+function ZipcodeForm({ getForecast, setFahrenheit }) {
     const [formData, setFormData] = useState({ 
         zipcode: "",
     })
@@ -14,6 +14,8 @@ function ZipcodeForm({ getForecast }) {
         //test zipcode regex - 5 digits
         const re = /(^\d{5}$)/;
         if (re.test(formData.zipcode)) {
+            //change fahrenheit back to true as it is the default unit, then update forecast 
+            await setFahrenheit(true)
             await getForecast(formData)
         } else {
             alert("Invalid zipcode.")
