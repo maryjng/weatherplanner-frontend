@@ -45,8 +45,8 @@ class PlannerApi {
   }
 
   //Update user email and/or password
-  static async update(data) {
-    let res = await this.request(`users/${data.username}`, data, "patch")
+  static async updateUser(username, data) {
+    let res = await this.request(`users/${username}`, data, "patch")
     return res;
   }
 

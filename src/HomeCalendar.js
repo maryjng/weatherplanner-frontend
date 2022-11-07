@@ -113,7 +113,7 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent, handleAdd
             "endDate": apptDetails.enddate
         })
         //save each day's forecast to db.
-        //Checking if max_temp is included
+        //Checking if max_temp is included as a measure to not include days with no forecast
         for (const key in res) {
             if (res[key].max_temp) {
             await PlannerApi.addForecast(apptDetails.id, res[key])
