@@ -19,8 +19,8 @@ The basic goal of the app is to incorporate weather forecasts into a calendar so
 
 # Component Hierarchy and General Explanation
 
-![component-hierarchy-weatherplanner](https://user-images.githubusercontent.com/68235230/200211314-1d6e07d8-a642-46b7-89ff-7bf677255670.png)
+![component-hierarchy-weatherplanner](https://user-images.githubusercontent.com/68235230/200212497-5b42f558-3263-4b12-8b7b-57a22a336730.png)
 
 The main component that handles appointment and forecast CRUD functionality is the <HomeCalendar /> component. It contains the React Big Calendar app, <Calendar />, and two different components that will display depending on what the user clicks on. One is <ViewEditAppt />, which has the form to edit appointments. The other is <NewApptCalendar />, which has the <ZipcodeForm /> that allows users to lookup forecasts based on zipcode. Both <ViewEditAppt /> and <NewApptCalendar /> contain the <ForecastCalendar /> component, which is used to display forecast data. <ForecastCalendar /> is made up of <ForecastDay /> components which each represent a day of forecast.
 
-The <CalNavbar /> component, child of <App />, contains NavLinks and their respective components for user navigation. Links/components are for <Login />, <Profile />, <Logout />, and <Register />. 
+The <CalNavbar /> component, child of <App />, contains NavLinks and their respective components for user navigation. Links/components are for <Login />, <Profile />, <Logout />, and <Register />. <Home /> is another child of <App /> which is just the "/" view for users to start on.
