@@ -27,9 +27,9 @@ function NewApptForm({handleAddEvent}) {
         try {
             //check if start date is after end date
             if (Date.parse(`${formData.startDate}`) > Date.parse(`${formData.endDate}`)) {
-                throw "Start date cannot be after end date";
+                throw new Error("Start date cannot be after end date");
             }
-            if (!(re.test(formData.zipcode))) throw "Invalid zipcode"
+            if (!(re.test(formData.zipcode))) throw new Error("Invalid zipcode");
 
             let newAppt = await PlannerApi.addAppt(formData)
             await handleAddEvent(newAppt)
@@ -45,8 +45,8 @@ function NewApptForm({handleAddEvent}) {
                 description: "" 
             })
         } catch(e) {
-            console.log(e)
-            alert(`Creation failed. ${e}`)
+            console.error(e)
+            alert(`Creation unsuccessful.`)
         }
     }
 

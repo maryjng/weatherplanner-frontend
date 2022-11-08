@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import PlannerApi from "../api"
 
 // FORM FOR GETTING FORECAST FOR GIVEN ZIPCODE SO USERS CAN VIEW FORECAST WHILE MAKING/EDITING AN APPOINTMENT
 

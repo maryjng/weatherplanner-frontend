@@ -23,10 +23,15 @@ function EditApptForm({handleEditEvent, apptDetails, setApptDetails, setApptFore
     //update the forecast display whenever apptDetails updates
     useEffect(() => {
         console.log("useEffect")
-        async function updateForecastDisplay() {
-            await updateForecast()
+        //if apptDetail was reset to blank after an appt was deleted, set the forecast to blank as well
+        if (apptDetails.id === '') {
+            setApptForecast([])
+        } else {
+            async function updateForecastDisplay() {
+                await updateForecast()
+            }
+            updateForecastDisplay()
         }
-        updateForecastDisplay()
     }, [apptDetails])
 
 
@@ -47,7 +52,7 @@ function EditApptForm({handleEditEvent, apptDetails, setApptDetails, setApptFore
         const re = /(^\d{2}[6-9]\d{2}$)/;
         try {
             if (!(formData.zipcode === "" || ((re.test(formData.zipcode)) && formData.zipcode !== '00600'))) {
-                throw "Invalid Zipcode";
+                throw new Error("Invalid Zipcode");
             }
 
             let editAppt = await PlannerApi.updateAppt(appt_id, formData)
@@ -76,7 +81,8 @@ function EditApptForm({handleEditEvent, apptDetails, setApptDetails, setApptFore
             })
 
         } catch (error) {
-            alert("Changes failed. Please check your input. Make sure start date is before end date.")
+            console.error(error)
+            alert("Changes unsuccessful. Please check your input. Make sure start date is before end date.")
         } 
     }
 

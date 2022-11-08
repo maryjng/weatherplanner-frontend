@@ -85,7 +85,7 @@ function App() {
             setAllEvents(calendarEvents)
           }
         } catch (error) {
-          console.log(error.stack)
+          console.error(error)
           //if an error occurs, the user will have to login again
           setCurrentUser("")
         }

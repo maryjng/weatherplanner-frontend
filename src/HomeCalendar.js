@@ -94,7 +94,18 @@ function HomeCalendar({ allEvents, handleEditEvent, handleDeleteEvent, handleAdd
     async function handleDelete() {
         let result = await PlannerApi.deleteAppt(apptDetails.id)
         handleDeleteEvent(apptDetails.id)
-        navigate("/calendar/view", { replace: true });
+
+        //reset the displayed appointment view. This also triggers a reset of the forecast through a useEffect in EditApptForm.
+        setApptDetails({
+            id: "",
+            username: "",
+            title: "",
+            startdate: "",
+            enddate: "",
+            location: "",
+            zipcode: "",
+            description: ""
+        })
         return result;
     }
 

@@ -1,12 +1,9 @@
 import React, { useState } from "react"
 import { navigate } from "react-big-calendar/lib/utils/constants";
-import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 function Register({ register }) {
-    const navigate = useNavigate()
-
     const [formData, setFormData] = useState({
         username:"",
         password:"",
@@ -19,7 +16,7 @@ function Register({ register }) {
         try {
             //check if passwords match. If yes then delete confirmPassword before sending request
             if (formData.password !== formData.confirmPassword) {
-                throw "Passwords do not match"
+                throw new Error("Passwords do not match")
             } 
             delete formData.confirmPassword
 
@@ -34,7 +31,8 @@ function Register({ register }) {
             navigate("/login", { replace: true });
 
         } catch (error) {
-            alert(error)
+            console.error(error)
+            alert("Registration unsuccessful.")
         }
     }
 

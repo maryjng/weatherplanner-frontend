@@ -1,14 +1,12 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import UserContext from "../UserContext";
-import { STORETOKEN } from "../App";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 function Login({ login }) {
     const { currentUser } = useContext(UserContext)
     const navigate = useNavigate()
-    const [error, setError] = useState("")
 
     const [formData, setFormData] = useState({
         username:"",
@@ -17,11 +15,16 @@ function Login({ login }) {
 
     function handleSubmit(e){
         e.preventDefault()
-        login(formData)
-        setFormData({
-            username:"",
-            password:""
-        })
+        try {
+            login(formData)
+            setFormData({
+                username:"",
+                password:""
+            })
+        } catch(e) {
+            console.error(e)
+            alert("Login unsuccessful.")
+        }
     }
 
     function handleChange(e){

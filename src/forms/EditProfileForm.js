@@ -24,7 +24,6 @@ function EditProfileForm() {
         e.preventDefault()
         try {
             let data = {
-                "username": currentUser,
                 "currPassword": formData.currPassword
             }
             //if password is being updated, make sure new password and its confirmation field match
@@ -35,12 +34,12 @@ function EditProfileForm() {
                 data.email = formData.email
             } 
 
-            await PlannerApi.update(data)
+            await PlannerApi.updateUser(currentUser, data)
             setFormData(DEFAULT_STATE)
 
         } catch(e) {
-            console.log(e)
-            alert("Update failed. Please check inputs.")
+            console.error(e)
+            alert("Update unsuccessful. Please check inputs.")
             setFormData(DEFAULT_STATE)
         }
     }
