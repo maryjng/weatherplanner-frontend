@@ -9,20 +9,22 @@ function ZipcodeForm({ getForecast, setFahrenheit }) {
 
     async function handleSubmit(e) {
         e.preventDefault()
+        try {
+            //test zipcode regex - 5 digits
+            const re = /(^\d{5}$)/;
+            if (!(re.test(formData.zipcode))) throw Error("Invalid zipcode.")
 
-        //test zipcode regex - 5 digits
-        const re = /(^\d{5}$)/;
-        if (re.test(formData.zipcode)) {
             //change fahrenheit back to true as it is the default unit, then update forecast 
             await setFahrenheit(true)
             await getForecast(formData)
-        } else {
-            alert("Invalid zipcode.")
-        }
 
-        setFormData({
-            zipcode: "",
-        })
+            setFormData({
+                zipcode: "",
+            })
+        } catch(e) {
+            alert("Invalid zipcode.")
+            console.error(Error(e.message ?? e));
+        }
     }
 
     function handleChange(e) {

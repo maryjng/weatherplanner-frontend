@@ -80,9 +80,9 @@ function EditApptForm({handleEditEvent, apptDetails, setApptDetails, setApptFore
                 description: "" 
             })
 
-        } catch (error) {
-            console.error(error)
-            alert("Changes unsuccessful. Please check your input. Make sure start date is before end date.")
+        } catch(e) {
+            alert("Changes unsuccessful.")
+            console.error(Error(e.message ?? e));
         } 
     }
 

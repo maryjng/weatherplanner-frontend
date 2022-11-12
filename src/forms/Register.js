@@ -1,9 +1,11 @@
 import React, { useState } from "react"
-import { navigate } from "react-big-calendar/lib/utils/constants";
+import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 function Register({ register }) {
+    const navigate = useNavigate()
+    
     const [formData, setFormData] = useState({
         username:"",
         password:"",
@@ -29,10 +31,9 @@ function Register({ register }) {
 
             //redirect to login
             navigate("/login", { replace: true });
-
-        } catch (error) {
-            console.error(error)
+        } catch(e) {
             alert("Registration unsuccessful.")
+            console.error(Error(e.message ?? e));
         }
     }
 

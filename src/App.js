@@ -84,8 +84,8 @@ function App() {
             })
             setAllEvents(calendarEvents)
           }
-        } catch (error) {
-          console.error(error)
+        } catch(e) {
+          console.error(Error(e.message ?? e));
           //if an error occurs, the user will have to login again
           setCurrentUser("")
         }
@@ -100,13 +100,14 @@ function App() {
       let token = await PlannerApi.login(data)
       setToken(token);
     } catch(e) {
-      alert(e)
+      alert("Login unsuccessful.")
+      console.error(Error(e.message ?? e));
     }
   }
 
+  //registers user. User still needs to log in after.
   async function register(data) {
-    let token = await PlannerApi.register(data)
-    setToken(token);
+    await PlannerApi.register(data)
   }
 
   function logout() {
@@ -118,7 +119,7 @@ function App() {
 
   return (
     <>
-    <UserContext.Provider value={{currentUser, token}}>
+    <UserContext.Provider value={{currentUser, token }}>
       <BrowserRouter>
         <CalNavbar login={login} logout={logout} register={register} />
 

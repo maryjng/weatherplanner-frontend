@@ -38,9 +38,8 @@ function EditProfileForm() {
             setFormData(DEFAULT_STATE)
 
         } catch(e) {
-            console.error(e)
-            alert("Update unsuccessful. Please check inputs.")
-            setFormData(DEFAULT_STATE)
+            alert("Changes unsuccessful.")
+            console.error(Error(e.message ?? e));
         }
     }
 

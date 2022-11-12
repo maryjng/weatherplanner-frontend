@@ -45,8 +45,8 @@ function NewApptForm({handleAddEvent}) {
                 description: "" 
             })
         } catch(e) {
-            console.error(e)
-            alert(`Creation unsuccessful.`)
+            alert("Creation unsuccessful.")
+            console.error(Error(e.message ?? e));
         }
     }
 
@@ -83,12 +83,12 @@ function NewApptForm({handleAddEvent}) {
 
             <Form.Group classname="mb-3" controlId="formBasicStartDate">
                 <Form.Label>Start Date and Time</Form.Label>
-                <DatePicker placeholderText="Start Date" showTimeSelect timeIntervals={15} value={formData.startDate} selected={formData.startDate} dateFormat="MMMM d, yyyy h:mm aa" onChange={(startDate) => setFormData({ ...formData, startDate })} />
+                <DatePicker placeholderText="Start Date" showTimeSelect timeIntervals={15} name="startDate" value={formData.startDate} selected={formData.startDate} dateFormat="MMMM d, yyyy h:mm aa" onChange={(startDate) => setFormData({ ...formData, startDate })} />
             </Form.Group>
 
             <Form.Group classname="mb-3" controlId="formBasicEndDate">
                 <Form.Label>End Date and Time</Form.Label>
-                <DatePicker placeholderText="End Date" showTimeSelect timeIntervals={15} value={formData.endDate} selected={formData.endDate} dateFormat="MMMM d, yyyy h:mm aa" onChange={(endDate) => setFormData({ ...formData, endDate })} />
+                <DatePicker placeholderText="End Date" showTimeSelect timeIntervals={15} name="endDate" value={formData.endDate} selected={formData.endDate} dateFormat="MMMM d, yyyy h:mm aa" onChange={(endDate) => setFormData({ ...formData, endDate })} />
             </Form.Group>
 
             <Form.Group classname="mb-3" controlId="formBasicLocation">

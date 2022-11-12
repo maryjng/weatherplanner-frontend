@@ -22,8 +22,8 @@ function Login({ login }) {
                 password:""
             })
         } catch(e) {
-            console.error(e)
             alert("Login unsuccessful.")
+            console.error(Error(e.message ?? e));
         }
     }
 
@@ -45,6 +45,7 @@ function Login({ login }) {
     return(
         <div style={{marginLeft: "5%", width: "20%"}}>
             <h2>Login</h2>
+
             <Form>
                 <Form.Group classname="mb-3" controlId="formBasicUsername">
                     <Form.Label>Username</Form.Label>
