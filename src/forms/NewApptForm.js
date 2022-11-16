@@ -21,15 +21,12 @@ function NewApptForm({handleAddEvent}) {
     async function handleSubmit(e) {
         e.preventDefault()
 
-        //check zipcode
-        const re = /(^\d{2}[6-9]\d{2}$)/;
-
         try {
             //check if start date is after end date
             if (Date.parse(`${formData.startDate}`) > Date.parse(`${formData.endDate}`)) {
                 throw new Error("Start date cannot be after end date");
             }
-            if (!(re.test(formData.zipcode))) throw new Error("Invalid zipcode");
+            if ((formData.zipcode.length !== 5) || (601 <= (parseInt(formData.zipcode)) <= 99999 )) throw new Error("Invalid zipcode");
 
             let newAppt = await PlannerApi.addAppt(formData)
             await handleAddEvent(newAppt)
