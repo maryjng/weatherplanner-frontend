@@ -10,7 +10,7 @@ function ZipcodeForm({ getForecast, setFahrenheit }) {
     async function handleSubmit(e) {
         e.preventDefault()
         try {
-            if ((formData.zipcode.length !== 5) || (601 <= (parseInt(formData.zipcode)) <= 99999 )) throw new Error("Invalid zipcode");
+            if ((formData.zipcode.length !== 5) || (601 <= (parseInt(formData.zipcode)) <= 99734 )) throw new Error("Invalid zipcode");
 
             //change fahrenheit back to true as it is the default unit, then update forecast 
             await setFahrenheit(true)
