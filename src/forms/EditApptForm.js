@@ -49,11 +49,8 @@ function EditApptForm({handleEditEvent, apptDetails, setApptDetails, setApptFore
         e.preventDefault()
 
         //test zipcode regex - 5 digits. Only takes 6 to 9 for the third digit. Excludes 00600 completely.
-        const re = /(^\d{2}[6-9]\d{2}$)/;
         try {
-            if (!(formData.zipcode === "" || ((re.test(formData.zipcode)) && formData.zipcode !== '00600'))) {
-                throw new Error("Invalid Zipcode");
-            }
+            if ((formData.zipcode.length !== 5) || (601 <= (parseInt(formData.zipcode)) <= 99999 )) throw new Error("Invalid zipcode");
 
             let editAppt = await PlannerApi.updateAppt(appt_id, formData)
             handleEditEvent(editAppt)
