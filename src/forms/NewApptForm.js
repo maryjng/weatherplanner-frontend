@@ -26,8 +26,8 @@ function NewApptForm({handleAddEvent}) {
             if (Date.parse(`${formData.startDate}`) > Date.parse(`${formData.endDate}`)) {
                 throw new Error("Start date cannot be after end date");
             }
-            if ((formData.zipcode.length !== 5) || (601 <= (parseInt(formData.zipcode)) <= 99734 )) throw new Error("Invalid zipcode");
-
+            if ((formData.zipcode.length !== 5) || (parseInt(formData.zipcode) > 99929) || (parseInt(formData.zipcode) < 601)) throw Error("Invalid zipcode")
+            
             let newAppt = await PlannerApi.addAppt(formData)
             await handleAddEvent(newAppt)
             await saveForecast(newAppt.id)
